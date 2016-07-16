@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">foodapp</string>
+    <string name="title_activity_login_registration">Sign up/in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="login">Log in</string>
+    <string name="register">Register</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="session">"MyPreferences"</string>
+    <string name="rootURL">"https://foodapp-mverapp.rhcloud.com/"</string>
+    <string name="loginFile">"Login.php"</string>
+    <string name="registerFile">"Register.php"</string>
+
+    <string name="USERNAME">"username"</string>
+    <string name="PASSWORD">"password"</string>
 </resources>
