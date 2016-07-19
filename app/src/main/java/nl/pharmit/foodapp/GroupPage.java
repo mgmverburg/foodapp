@@ -24,7 +24,7 @@ public class GroupPage  extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(GroupPage.this, GroupPageCreated.class));
+                startActivity(new Intent(GroupPage.this, GroupPageListView.class));
             }
 
         });
