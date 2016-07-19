@@ -3,11 +3,10 @@ $response["isError"] = TRUE;
 if($_SERVER["REQUEST_METHOD"]=="POST"){
   require_once('DBConnect.php');
 
-  $username = $_POST["username"];
-  $groupname = $_POST["groupname"];
+  $username = $_POST["admin"];
+  $groupname = $_POST["name"];
 
-	// $groupStatement = mysqli_prepare($connection, "INSERT INTO User (username, password) VALUES (?, ?)");
-  $groupStatement = mysqli_prepare($connection, "INSERT INTO Group (GID, name, admin) VALUES (DEFAULT, 'test', 'test')");
+  $groupStatement = mysqli_prepare($connection, "INSERT INTO Group1 (name, admin) VALUES (?, ?)");
   // mysqli_report(MYSQLI_REPORT_ALL);
 //   if ($groupStatement == FALSE) {
 //     die ("Mysql Error: " . mysqli_error($connection));
