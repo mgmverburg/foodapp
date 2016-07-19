@@ -120,7 +120,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(getResources().getString(R.string.USERNAME), loggedInUsername);
                                 editor.commit();
-                                startActivity(new Intent(LoginRegistrationActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginRegistrationActivity.this, GroupPage.class));
                             } else {
                                 Toast.makeText(LoginRegistrationActivity.this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
                             }
