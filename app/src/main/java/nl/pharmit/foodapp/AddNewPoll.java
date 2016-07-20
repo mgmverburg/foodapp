@@ -13,7 +13,7 @@ import android.widget.ImageButton;
  */
 public class AddNewPoll extends AppCompatActivity {
     ImageButton add;
-    View view;
+
 
 
 
@@ -23,25 +23,17 @@ public class AddNewPoll extends AppCompatActivity {
         setContentView(R.layout.admin_poll_creating_page);
         ImageButton add = (ImageButton) findViewById(R.id.imageButton2);
 
-    }
+        add.setOnClickListener(new View.OnClickListener() {
+            Fragment poll = null;
+            public void onClick(View v) {
+                 poll= new FragmentPoll();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, poll).commit();
 
-    public void thePoll(View view) {
-        Fragment poll = null;
-        ImageButton add = (ImageButton) findViewById(R.id.imageButton2);
-        if(view == findViewById(R.id.add)) {
-            poll = new FragmentPoll();
-
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_placeholder, poll);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_placeholder, poll).commit();
+            }
 
 
-
-
-
+        });
 
     }
+
 }
