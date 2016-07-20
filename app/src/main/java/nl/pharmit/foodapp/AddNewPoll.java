@@ -1,6 +1,6 @@
 package nl.pharmit.foodapp;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -27,15 +27,17 @@ public class AddNewPoll extends AppCompatActivity {
 
     public void thePoll(View view) {
         Fragment poll = null;
-
+        ImageButton add = (ImageButton) findViewById(R.id.imageButton2);
         if(view == findViewById(R.id.add)) {
             poll = new FragmentPoll();
 
         }
-        FragmentManager fragmentManager = getFragmentManager();
-        android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.replace(R.id.fragment_placeholder, poll);
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_placeholder, poll).commit();
+
 
 
 
