@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -70,8 +71,11 @@ public class GroupPage  extends AppCompatActivity {
                                     @Override
 
                                     public void onClick(View v) {
-
-                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
+                                        AddUserDialogFragment addFragment = new AddUserDialogFragment();
+                                        addFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                                        // Show DialogFragment
+                                        addFragment.show(fm, "Dialog Fragment");
+//                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
                                     }
                                 });
                                 updateGroupInfo(userGroupID);
