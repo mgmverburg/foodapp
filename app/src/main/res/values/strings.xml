@@ -19,7 +19,12 @@
     <string name="rootURL">"https://foodapp-mverapp.rhcloud.com/"</string>
     <string name="loginFile">"Login.php"</string>
     <string name="registerFile">"Register.php"</string>
+    <string name="getUserGroup">"GetUserGroup.php"</string>
+    <string name="getGroup">"GetGroup.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
+    <string name="GROUPID">"GID"</string>
+    <string name="GROUPNAME">"name"</string>
+    <string name="GROUPMEMBERS">"users"</string>
 </resources>
