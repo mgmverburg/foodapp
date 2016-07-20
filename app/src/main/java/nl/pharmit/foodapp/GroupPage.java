@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class GroupPage  extends AppCompatActivity {
     Button button;
     String username;
+    FragmentManager fm = getSupportFragmentManager();
     private String[] data;
 
     @Override
@@ -63,6 +65,15 @@ public class GroupPage  extends AppCompatActivity {
                             if (!isError) {
                                 userGroupID = jObj.getString(getResources().getString(R.string.GROUPID));
                                 setContentView(R.layout.activity_group_page_created);
+                                ImageButton invite = (ImageButton) findViewById(R.id.imageButton);
+                                invite.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+
+                                    public void onClick(View v) {
+
+                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
+                                    }
+                                });
                                 updateGroupInfo(userGroupID);
 
 //                                startActivity(new Intent(GroupPage.this, GroupPageCreated.class));
@@ -127,14 +138,7 @@ public class GroupPage  extends AppCompatActivity {
                                 groupNameText.setText(groupName);
                                 JSONArray users = jObj.getJSONArray(getResources().getString(R.string.GROUPMEMBERS));
                                 updateListUsers(users);
-                                ImageButton invite = (ImageButton) findViewById(R.id.imageButton);
-                                invite.setOnClickListener(new View.OnClickListener() {
-                                    @Override
 
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
-                                    }
-                                });
 //
                             } else {
                                 Toast.makeText(GroupPage.this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
