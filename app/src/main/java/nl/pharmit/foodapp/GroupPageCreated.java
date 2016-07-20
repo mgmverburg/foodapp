@@ -2,9 +2,11 @@ package nl.pharmit.foodapp;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.BreakIterator;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import java.util.List;
 public class GroupPageCreated extends AppCompatActivity {
 
     private String[] data = new String[55];
+    ImageButton invite;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -47,6 +51,16 @@ public class GroupPageCreated extends AppCompatActivity {
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, data);
         lv.setAdapter(adapter);
 //        lv.setAdapter(new MyListAdapter(this, R.layout.activity_group_page_created, data));
+        ImageButton invite = (ImageButton) findViewById(R.id.imageButton);
+        invite.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View v) {
+                startActivity(new Intent(GroupPageCreated.this, AddNewPoll.class));
+            }
+        });
+
+
 
 
     }
