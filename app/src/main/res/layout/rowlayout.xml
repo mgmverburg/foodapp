@@ -11,6 +11,8 @@
         android:text="@+id/label"
         android:textSize="20dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/label">
     </TextView>
 
@@ -19,10 +21,13 @@
         android:layout_height="wrap_content"
         android:text=""
         android:id="@+id/remove_user"
-        android:background="@drawable/delete"
+        android:src="@drawable/delete_style"
         android:layout_alignParentRight="true"
         android:layout_marginRight="31dp"
         android:layout_marginEnd="31dp"
-        android:backgroundTint="#c6c6c6"/>
+        android:background="@null"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"/>
+
 
 </RelativeLayout>
