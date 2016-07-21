@@ -15,12 +15,15 @@
         completions."
     </string>
 
+    <string name="successMessage">"success_msg"</string>
+
     <string name="session">"MyPreferences"</string>
     <string name="rootURL">"https://foodapp-mverapp.rhcloud.com/"</string>
     <string name="loginFile">"Login.php"</string>
     <string name="registerFile">"Register.php"</string>
     <string name="getUserGroup">"GetUserGroup.php"</string>
     <string name="getGroup">"GetGroup.php"</string>
+    <string name="removeUser">"DeleteUserGroup"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
