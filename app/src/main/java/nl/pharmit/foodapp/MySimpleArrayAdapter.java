@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         textView.setText(values[position]);
         // Change the icon for Windows and iPhone
         final String username = values[position];
-        Button button = (Button) rowView.findViewById(R.id.remove_user);
+        ImageButton button = (ImageButton) rowView.findViewById(R.id.remove_user);
         if (admin.equals(username)) {
             button.invalidate();
             button.setVisibility(View.INVISIBLE);
