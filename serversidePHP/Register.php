@@ -4,7 +4,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   require_once('DBConnect.php');
 
   $username = $_POST["username"];
-  $password = $_POST["password"];
+  // $password = $_POST["password"];
+  $passwordHash = sha1($_POST['password']);
 
   //checks if username exists
   $existingUsernameStatement = mysqli_prepare($connection, "SELECT Username FROM User WHERE username = ?");
@@ -17,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     mysqli_stmt_close($existingUsernameStatement);
     //The question marks tell the prepare statement that it needs to pass a parameter to it
     $userStatement = mysqli_prepare($connection, "INSERT INTO User (username, password) VALUES (?, ?)");
-    mysqli_stmt_bind_param($userStatement, "ss", $username, $password);
+    mysqli_stmt_bind_param($userStatement, "ss", $username, $passwordHash);
     $userStatementSuccess = mysqli_stmt_execute($userStatement);
 
     if ($userStatementSuccess) {

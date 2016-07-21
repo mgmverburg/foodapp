@@ -27,11 +27,15 @@ import java.util.Map;
 public class MySimpleArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final String[] values;
+    private final String groupID;
+    private final String admin;
 
-    public MySimpleArrayAdapter(Context context, String[] values) {
+    public MySimpleArrayAdapter(Context context, String[] values, String groupID, String admin) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
+        this.groupID = groupID;
+        this.admin = admin;
     }
 
     @Override
@@ -40,16 +44,21 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.label);
-        Button button = (Button) rowView.findViewById(R.id.remove_user);
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
 
-                                      }
-                                  });
         textView.setText(values[position]);
         // Change the icon for Windows and iPhone
-        String s = values[position];
+        final String username = values[position];
+        Button button = (Button) rowView.findViewById(R.id.remove_user);
+        if (admin.equals(username)) {
+            button.invalidate();
+        } else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteUser(username, MySimpleArrayAdapter.this.groupID);
+                }
+            });
+        }
 
         //if user is itself, then don't show X button
 //        if (s.startsWith("Windows7") || s.startsWith("iPhone")
@@ -83,6 +92,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
                             if (!isError) {
                                 message = jObj.getString(context.getResources().getString(R.string.successMessage));
                                 Toast.makeText(context, message , Toast.LENGTH_LONG).show();
+                                ((AddUserDialogFragment.AddUserDialogListener)context).onDone();
                                 //reload page with data
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();

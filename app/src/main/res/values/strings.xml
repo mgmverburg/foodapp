@@ -14,8 +14,11 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="cancel">"Cancel"</string>
+    <string name="adduser">"Add"</string>
 
     <string name="successMessage">"success_msg"</string>
+    <string name="errorMessage">"error_msg"</string>
 
     <string name="session">"MyPreferences"</string>
     <string name="rootURL">"https://foodapp-mverapp.rhcloud.com/"</string>
@@ -23,7 +26,8 @@
     <string name="registerFile">"Register.php"</string>
     <string name="getUserGroup">"GetUserGroup.php"</string>
     <string name="getGroup">"GetGroup.php"</string>
-    <string name="removeUser">"DeleteUserGroup"</string>
+    <string name="removeUser">"DeleteUserGroup.php"</string>
+    <string name="addUser">"PostUserGroup.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>

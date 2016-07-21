@@ -32,9 +32,10 @@ import java.util.Map;
 /**
  * Created by s157218 on 18-7-2016.
  */
-public class GroupPage  extends AppCompatActivity {
+public class GroupPage  extends AppCompatActivity implements AddUserDialogFragment.AddUserDialogListener {
     Button button;
     String username;
+    String groupID;
     FragmentManager fm = getSupportFragmentManager();
     private String[] data;
 
@@ -45,7 +46,6 @@ public class GroupPage  extends AppCompatActivity {
         SharedPreferences sharedpreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         username = sharedpreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
-
 
     }
 
@@ -71,7 +71,7 @@ public class GroupPage  extends AppCompatActivity {
                                     @Override
 
                                     public void onClick(View v) {
-                                        AddUserDialogFragment addFragment = new AddUserDialogFragment();
+                                        AddUserDialogFragment addFragment = AddUserDialogFragment.newInstance(GroupPage.this.groupID);
                                         addFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                                         // Show DialogFragment
                                         addFragment.show(fm, "Dialog Fragment");
@@ -125,6 +125,7 @@ public class GroupPage  extends AppCompatActivity {
     }
 
     private void updateGroupInfo(String groupID) {
+        this.groupID = groupID;
         final String paramGID = groupID;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getGroup) ,
@@ -180,7 +181,12 @@ public class GroupPage  extends AppCompatActivity {
 //            data.add("This user" + i);
         }
 
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(GroupPage.this, data);
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(GroupPage.this, data, this.groupID, this.username);
         lv.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDone() {
+        updateGroupInfo(this.groupID);
     }
 }
