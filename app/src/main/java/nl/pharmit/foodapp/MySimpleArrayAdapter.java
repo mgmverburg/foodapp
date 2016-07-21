@@ -39,6 +39,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         this.admin = admin;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
