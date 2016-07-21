@@ -91,7 +91,11 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 button.setOnClickListener(new View.OnClickListener(){
                                     @Override
                                     public void onClick(View v){
-                                        startActivity(new Intent(GroupPage.this, GroupPage.class));
+                                        CreateGroupDialogFragment createFragment = CreateGroupDialogFragment.newInstance(GroupPage.this.username);
+                                        createFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                                        // Show DialogFragment
+                                        createFragment.show(fm, "Dialog Fragment");
+//                                        startActivity(new Intent(GroupPage.this, GroupPage.class));
                                     }
 
                                 });
@@ -187,7 +191,13 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     }
 
     @Override
-    public void onDone() {
-        updateGroupInfo(this.groupID);
+    public void onDone(boolean restartActivity) {
+        if (restartActivity) {
+            startActivity(new Intent(GroupPage.this, GroupPage.class));
+        } else {
+            updateGroupInfo(this.groupID);
+        }
     }
+
+
 }

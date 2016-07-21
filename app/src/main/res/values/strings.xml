@@ -28,12 +28,14 @@
     <string name="getGroup">"GetGroup.php"</string>
     <string name="removeUser">"DeleteUserGroup.php"</string>
     <string name="addUser">"PostUserGroup.php"</string>
+    <string name="createGroup">"PostGroup.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
     <string name="GROUPID">"GID"</string>
     <string name="GROUPNAME">"name"</string>
     <string name="GROUPMEMBERS">"users"</string>
+    <string name="ADMIN">"admin"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

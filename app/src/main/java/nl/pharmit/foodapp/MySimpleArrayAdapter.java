@@ -1,14 +1,11 @@
 package nl.pharmit.foodapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,7 +92,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
                             if (!isError) {
                                 message = jObj.getString(context.getResources().getString(R.string.successMessage));
                                 Toast.makeText(context, message , Toast.LENGTH_LONG).show();
-                                ((AddUserDialogFragment.AddUserDialogListener)context).onDone();
+                                ((AddUserDialogFragment.AddUserDialogListener)context).onDone(false);
                                 //reload page with data
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();

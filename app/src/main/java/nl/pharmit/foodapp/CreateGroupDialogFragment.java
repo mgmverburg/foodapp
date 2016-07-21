@@ -3,7 +3,6 @@ package nl.pharmit.foodapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,25 +26,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by s148494 on 20-7-2016.
+ * Created by s148494 on 21-7-2016.
  */
 
-public class AddUserDialogFragment extends DialogFragment implements TextView.OnEditorActionListener {
-    EditText mEditText;
-    AddUserDialogListener mListener;
-    String groupID;
+public class CreateGroupDialogFragment extends DialogFragment {
+    EditText groupNameText;
+    AddUserDialogFragment.AddUserDialogListener mListener;
+    String username;
     Context context;
 
     public interface AddUserDialogListener {
-        public void onDone(boolean restartActivity);
+        public void onDone();
+//        public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    public static AddUserDialogFragment newInstance(String groupID) {
-        AddUserDialogFragment f = new AddUserDialogFragment();
+    public static CreateGroupDialogFragment newInstance(String username) {
+        CreateGroupDialogFragment f = new CreateGroupDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putString("GID", groupID);
+        args.putString("username", username);
         f.setArguments(args);
 
         return f;
@@ -55,21 +54,21 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.add_user_dialogfragment, container,
+        View rootView = inflater.inflate(R.layout.create_group_dialogfragment, container,
                 false);
-        groupID = getArguments().getString("GID");
-        mEditText = (EditText) rootView.findViewById(R.id.enterUsername);
-        getDialog().setTitle("Add user");
-        mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        username = getArguments().getString("username");
+        groupNameText = (EditText) rootView.findViewById(R.id.enterGroupname);
+        getDialog().setTitle("Create group");
+        groupNameText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        mEditText.requestFocus();
+        groupNameText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        mEditText.setOnEditorActionListener(this);
+//        groupNameText.setOnEditorActionListener(this);
 
         Button Cancel= (Button) rootView.findViewById(R.id.Cancel);
         Cancel.setOnClickListener(onCancel);
-        Button OK= (Button) rootView.findViewById(R.id.Add);
+        Button OK = (Button) rootView.findViewById(R.id.Create);
         OK.setOnClickListener(onOK);
 
         // Do something else
@@ -88,14 +87,15 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
     View.OnClickListener onOK=
             new View.OnClickListener(){
                 @Override public void onClick(View view){
-                    addUser();
+                    createGroup();
                 }
             };
 
-    public void addUser() {
-        final String paramUsername = mEditText.getText().toString();
-        final String paramGID = AddUserDialogFragment.this.groupID;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.addUser) ,
+    private void createGroup() {
+        final String paramAdmin = this.username;
+        final String paramGroupname = groupNameText.getText().toString();
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.createGroup) ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -105,9 +105,8 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-
                                 Toast.makeText(context, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
-                                mListener.onDone(false);
+                                mListener.onDone(true);
                                 dismiss();
                             } else {
                                 Toast.makeText(context, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
@@ -120,20 +119,21 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(getResources().getString(R.string.USERNAME), paramUsername);
-                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                params.put(getResources().getString(R.string.GROUPNAME), paramGroupname);
+                params.put(getResources().getString(R.string.ADMIN), paramAdmin);
                 return params;
             }
 
         };
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+
     }
 
     @Override
@@ -141,19 +141,18 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
         super.onAttach(context);
         this.context = context;
         try {
-            mListener = (AddUserDialogListener) context;
+            mListener = (AddUserDialogFragment.AddUserDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement AddUserDialogListener");
         }
     }
 
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (EditorInfo.IME_ACTION_DONE == actionId) {
-            addUser();
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//        if (EditorInfo.IME_ACTION_DONE == actionId) {
+//            addUser();
+//        }
+//        return false;
+//    }
 }
