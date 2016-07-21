@@ -27,8 +27,10 @@ public class AddNewPoll extends AppCompatActivity {
             Fragment poll = null;
             public void onClick(View v) {
                  poll= new FragmentPoll();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, poll).commit();
 
+                    if(poll != null) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, poll).commit();
+                    }
             }
 
 

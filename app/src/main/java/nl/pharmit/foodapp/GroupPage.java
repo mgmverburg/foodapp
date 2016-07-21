@@ -66,7 +66,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                             if (!isError) {
                                 userGroupID = jObj.getString(getResources().getString(R.string.GROUPID));
                                 setContentView(R.layout.activity_group_page_created);
-                                ImageButton invite = (ImageButton) findViewById(R.id.imageButton);
+                                ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
                                 invite.setOnClickListener(new View.OnClickListener() {
                                     @Override
 
