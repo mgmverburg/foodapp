@@ -174,6 +174,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
 
     private void updateListUsers(JSONArray members) throws JSONException {
         ListView lv = (ListView) findViewById(R.id.list);
+
         data = new String[members.length()];
         for (int i = 0; i < members.length(); i++) {
             JSONObject member = members.getJSONObject(i);

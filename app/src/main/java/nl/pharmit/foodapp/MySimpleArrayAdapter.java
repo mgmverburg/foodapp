@@ -51,6 +51,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         Button button = (Button) rowView.findViewById(R.id.remove_user);
         if (admin.equals(username)) {
             button.invalidate();
+            button.setVisibility(View.INVISIBLE);
         } else {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
