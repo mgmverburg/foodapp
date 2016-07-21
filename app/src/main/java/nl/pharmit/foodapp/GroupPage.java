@@ -34,15 +34,13 @@ import java.util.Map;
  */
 public class GroupPage  extends AppCompatActivity implements AddUserDialogFragment.AddUserDialogListener {
     Button button;
-    String username;
-    String groupID;
+    String username, groupID, admin;
     FragmentManager fm = getSupportFragmentManager();
     private String[] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SharedPreferences sharedpreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         username = sharedpreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
@@ -58,54 +56,21 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                     @Override
                     public void onResponse(String response) {
                         JSONObject jObj = null;
-                        String userGroupID;
+                        String userGroupID, admin;
                         Boolean isError = false;
                         try {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                userGroupID = jObj.getString(getResources().getString(R.string.GROUPID));
-                                setContentView(R.layout.activity_group_page_created);
-                                ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
-                                invite.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-
-                                    public void onClick(View v) {
-                                        AddUserDialogFragment addFragment = AddUserDialogFragment.newInstance(GroupPage.this.groupID);
-                                        addFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                                        // Show DialogFragment
-                                        addFragment.show(fm, "Dialog Fragment");
-//                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
-                                    }
-                                });
-                                updateGroupInfo(userGroupID);
-
-//                                startActivity(new Intent(GroupPage.this, GroupPageCreated.class));
-//
+                                GroupPage.this.groupID = jObj.getString(getResources().getString(R.string.GROUPID));
+                                GroupPage.this.admin = jObj.getString(getResources().getString(R.string.ADMIN));
+                                setup(true);
                             } else {
-                                setContentView(R.layout.activity_group_page);
-                                final Button button = (Button) findViewById(R.id.button);
-                                Typeface typeface= Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-                                button.setText("CREATE GROUP");
-                                button.setTypeface(typeface);
-                                button.setOnClickListener(new View.OnClickListener(){
-                                    @Override
-                                    public void onClick(View v){
-                                        CreateGroupDialogFragment createFragment = CreateGroupDialogFragment.newInstance(GroupPage.this.username);
-                                        createFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                                        // Show DialogFragment
-                                        createFragment.show(fm, "Dialog Fragment");
-//                                        startActivity(new Intent(GroupPage.this, GroupPage.class));
-                                    }
-
-                                });
-//                                Toast.makeText(GroupPageCreated.this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
+                                setup(false);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -128,9 +93,51 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         requestQueue.add(stringRequest);
     }
 
-    private void updateGroupInfo(String groupID) {
-        this.groupID = groupID;
-        final String paramGID = groupID;
+    private void setup( boolean hasGroup) {
+        if (hasGroup) {
+            setContentView(R.layout.activity_group_page_created);
+            ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
+            if (this.username.equals(this.admin)) {
+                invite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AddUserDialogFragment addFragment = AddUserDialogFragment.newInstance(GroupPage.this.groupID);
+                        addFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                        // Show DialogFragment
+                        addFragment.show(fm, "Dialog Fragment");
+//                                        startActivity(new Intent(GroupPage.this, AddNewPoll.class));
+                    }
+                });
+            } else {
+                invite.invalidate();
+                invite.setVisibility(View.INVISIBLE);
+
+            }
+            updateGroupInfo();
+        } else {
+            setContentView(R.layout.activity_group_page);
+            final Button button = (Button) findViewById(R.id.button);
+            Typeface typeface= Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+            button.setText("CREATE GROUP");
+            button.setTypeface(typeface);
+            button.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    CreateGroupDialogFragment createFragment = CreateGroupDialogFragment.newInstance(GroupPage.this.username);
+                    createFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                    // Show DialogFragment
+                    createFragment.show(fm, "Dialog Fragment");
+//                                        startActivity(new Intent(GroupPage.this, GroupPage.class));
+                }
+
+            });
+        }
+    }
+
+
+
+    private void updateGroupInfo() {
+        final String paramGID = this.groupID;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getGroup) ,
                 new Response.Listener<String>() {
@@ -147,7 +154,6 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 groupNameText.setText(groupName);
                                 JSONArray users = jObj.getJSONArray(getResources().getString(R.string.GROUPMEMBERS));
                                 updateListUsers(users);
-
 //
                             } else {
                                 Toast.makeText(GroupPage.this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
@@ -195,7 +201,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         if (restartActivity) {
             startActivity(new Intent(GroupPage.this, GroupPage.class));
         } else {
-            updateGroupInfo(this.groupID);
+            updateGroupInfo();
         }
     }
 
