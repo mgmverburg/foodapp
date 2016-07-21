@@ -11,6 +11,8 @@
         android:text="@+id/label"
         android:textSize="20dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/label">
     </TextView>
 
@@ -23,7 +25,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="31dp"
         android:layout_marginEnd="31dp"
-        android:background="@null"/>
+        android:background="@null"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"/>
 
 
 </RelativeLayout>
