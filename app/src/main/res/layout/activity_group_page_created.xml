@@ -12,7 +12,7 @@
         android:text="Group Name"
         android:id="@+id/group_name"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="25dp"
         android:textColor="#b7b7b6"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -25,18 +25,18 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:listSelector="@android:color/transparent"
-            android:dividerHeight="2sp"
+            android:dividerHeight="0.5sp"
             android:layout_below="@+id/group_name"
             android:layout_marginTop="30dp"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/buttonadd"
+                android:id="@+id/buttondisband"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@drawable/ic_action_add"
+                android:src="@drawable/disband_group"
                 app:elevation="5dp"
                 app:backgroundTint="@color/colorPrimary"
-                android:onClick="addNewNoteFunction"
+                android:onClick="addNewNoteFunction2"
                 app:borderWidth="0dp"
                 app:rippleColor="@color/colorAccent"
                 android:layout_gravity="bottom"
@@ -48,19 +48,19 @@
                 android:layout_alignParentEnd="true" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/buttondisband"
+            android:id="@+id/buttonadd"
              android:layout_width="56dp"
              android:layout_height="56dp"
-                android:src="@drawable/disband_group"
+                android:src="@drawable/ic_action_add"
                 app:elevation="5dp"
                 app:backgroundTint="@color/colorPrimary"
-                android:onClick="addNewNoteFunction2"
+                android:onClick="addNewNoteFunction"
                 app:borderWidth="0dp"
                 app:rippleColor="@color/colorAccent"
                 android:layout_gravity="bottom"
-            android:layout_above="@+id/buttonadd"
-            android:layout_alignLeft="@+id/buttonadd"
-            android:layout_alignStart="@+id/buttonadd"
+            android:layout_above="@+id/buttondisband"
+            android:layout_alignLeft="@+id/buttondisband"
+            android:layout_alignStart="@+id/buttondisband"
             android:layout_marginBottom="15dp" />
 
 
