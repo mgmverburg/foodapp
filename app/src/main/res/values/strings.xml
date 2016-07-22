@@ -32,6 +32,7 @@
     <string name="deleteGroup">"DeleteGroup.php"</string>
     <string name="getFoodOptions">"GetAllPollFood.php"</string>
     <string name="getActivePoll">"GetCurrentPoll.php"</string>
+    <string name="getFood">"GetFood.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
@@ -41,6 +42,8 @@
     <string name="ADMIN">"admin"</string>
     <string name="POLLID">"PID"</string>
     <string name="FOODITEMS">"items"</string>
+    <string name="FOODNAME">"name"</string>
+    <string name="FOODID">"FID"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
