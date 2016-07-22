@@ -27,13 +27,15 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
     private final String[] values;
     private final String groupID;
     private final String admin;
+    private final String loggedInUser;
 
-    public MySimpleArrayAdapter(Context context, String[] values, String groupID, String admin) {
+    public MySimpleArrayAdapter(Context context, String[] values, String groupID, String admin, String loggedInUser) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
         this.groupID = groupID;
         this.admin = admin;
+        this.loggedInUser = loggedInUser;
     }
 
 
@@ -46,16 +48,21 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
 
         textView.setText(values[position]);
         // Change the icon for Windows and iPhone
-        final String username = values[position];
+        final String rowUsername = values[position];
         ImageButton button = (ImageButton) rowView.findViewById(R.id.remove_user);
-        if (admin.equals(username)) {
+        if (admin.equals(rowUsername) || !admin.equals(this.loggedInUser)) {
             button.invalidate();
-            button.setVisibility(View.INVISIBLE);
+
+            if (admin.equals(rowUsername)) {
+                button.setImageResource(R.drawable.admin);
+            } else {
+                button.setVisibility(View.INVISIBLE);
+            }
         } else {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteUser(username, MySimpleArrayAdapter.this.groupID);
+                    removeUserFromGroup(rowUsername, MySimpleArrayAdapter.this.groupID, context, false);
                 }
             });
         }
@@ -73,9 +80,11 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
-    private void deleteUser(String username, String groupID) {
+    static public void removeUserFromGroup(String username, String groupID, Context contextParam, boolean leaveGroupParam) {
         final String paramUsername = username;
         final String paramGroupID = groupID;
+        final Context context = contextParam;
+        final Boolean leaveGroup = leaveGroupParam;
 //        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
@@ -90,9 +99,13 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                message = jObj.getString(context.getResources().getString(R.string.successMessage));
+                                if (leaveGroup) {
+                                    message = "You successfully left the group";
+                                } else {
+                                    message = jObj.getString(context.getResources().getString(R.string.successMessage));
+                                }
                                 Toast.makeText(context, message , Toast.LENGTH_LONG).show();
-                                ((AddUserDialogFragment.AddUserDialogListener)context).onDone(false);
+                                ((AddUserDialogFragment.AddUserDialogListener)context).onDone(leaveGroup);
                                 //reload page with data
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();

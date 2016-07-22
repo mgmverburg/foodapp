@@ -1,6 +1,8 @@
 package nl.pharmit.foodapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -34,7 +36,9 @@ import java.util.Map;
  */
 public class GroupPage  extends AppCompatActivity implements AddUserDialogFragment.AddUserDialogListener {
     Button button;
+    Context context = this;
     String username, groupID, admin;
+    boolean isAdmin;
     FragmentManager fm = getSupportFragmentManager();
     private String[] data;
 
@@ -63,8 +67,8 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 GroupPage.this.groupID = jObj.getString(getResources().getString(R.string.GROUPID));
-                                GroupPage.this.admin = jObj.getString(getResources().getString(R.string.ADMIN));
-                                setup(true);
+                                setContentView(R.layout.activity_group_page_created);
+                                updateGroupInfo();
                             } else {
                                 setup(false);
                             }
@@ -95,9 +99,12 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
 
     private void setup( boolean hasGroup) {
         if (hasGroup) {
-            setContentView(R.layout.activity_group_page_created);
+
             ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
+            final String alertMessage;
             if (this.username.equals(this.admin)) {
+                isAdmin = true;
+                alertMessage = "Are you sure you want to disband the group?";
                 invite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -109,11 +116,52 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                     }
                 });
             } else {
+                isAdmin = false;
+                alertMessage = "Are you sure you want to leave the group?";
                 invite.invalidate();
                 invite.setVisibility(View.INVISIBLE);
 
             }
-            updateGroupInfo();
+            ImageButton disbandButton = (ImageButton) findViewById(R.id.buttondisband);
+            disbandButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            context);
+
+                    // set title
+                    alertDialogBuilder.setTitle("Warning");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage(alertMessage)
+                            .setCancelable(true)
+                            .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (isAdmin) {
+                                        deleteGroup();
+                                    } else {
+                                        MySimpleArrayAdapter.removeUserFromGroup(GroupPage.this.username, GroupPage.this.groupID,
+                                                GroupPage.this, true);
+                                    }
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
+                }
+            });
         } else {
             setContentView(R.layout.activity_group_page);
             final Button button = (Button) findViewById(R.id.button);
@@ -132,6 +180,47 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
 
             });
         }
+    }
+
+    public void deleteGroup() {
+        final String paramGID = this.groupID;
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.deleteGroup) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                Toast.makeText(GroupPage.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
+                                GroupPage.this.onDone(true);
+                            } else {
+                                Toast.makeText(GroupPage.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(GroupPage.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                return params;
+            }
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 
@@ -153,6 +242,8 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 TextView groupNameText = (TextView) findViewById(R.id.group_name);
                                 groupNameText.setText(groupName);
                                 JSONArray users = jObj.getJSONArray(getResources().getString(R.string.GROUPMEMBERS));
+                                GroupPage.this.admin = jObj.getString(getResources().getString(R.string.ADMIN));
+                                setup(true);
                                 updateListUsers(users);
 //
                             } else {
@@ -192,7 +283,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
 //            data.add("This user" + i);
         }
 
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(GroupPage.this, data, this.groupID, this.username);
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(GroupPage.this, data, this.groupID, this.admin, this.username);
         lv.setAdapter(adapter);
     }
 

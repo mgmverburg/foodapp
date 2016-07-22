@@ -29,6 +29,7 @@
     <string name="removeUser">"DeleteUserGroup.php"</string>
     <string name="addUser">"PostUserGroup.php"</string>
     <string name="createGroup">"PostGroup.php"</string>
+    <string name="deleteGroup">"DeleteGroup.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
