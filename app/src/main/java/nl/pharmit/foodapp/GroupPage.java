@@ -41,6 +41,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     boolean isAdmin;
     FragmentManager fm = getSupportFragmentManager();
     private String[] data;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,10 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 GroupPage.this.groupID = jObj.getString(getResources().getString(R.string.GROUPID));
+                                sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(getResources().getString(R.string.GROUPID), GroupPage.this.groupID);
+                                editor.commit();
                                 setContentView(R.layout.activity_group_page_created);
                                 updateGroupInfo();
                             } else {
@@ -98,6 +103,14 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     }
 
     private void setup( boolean hasGroup) {
+
+        Button button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GroupPage.this, PollActivity.class));
+            }
+        });
         if (hasGroup) {
 
             ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
@@ -247,7 +260,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 updateListUsers(users);
 //
                             } else {
-                                Toast.makeText(GroupPage.this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(GroupPage.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
