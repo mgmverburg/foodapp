@@ -27,10 +27,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PollActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class PollActivity extends AppCompatActivity {
     String pollID;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoices = new ArrayList<FoodItem>();
+
+    class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
+        boolean firstChoice;
+
+        //boolean indicates if it is firstChoice or not
+        public onItemSelectedListener(boolean firstChoice) {
+            this.firstChoice = firstChoice;
+        }
+
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int pos, long id) {
+            FoodItem selectedChoice =  (FoodItem) parent.getItemAtPosition(pos);
+
+
+            // An item was selected. You can retrieve the selected item using
+            // parent.getItemAtPosition(pos)
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +60,13 @@ public class PollActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_poll);
 
         firstChoiceSpinner = (Spinner) findViewById(R.id.spinnerFirst);
+
         secondChoiceSpinner = (Spinner) findViewById(R.id.spinnerSecond);
 
         getActivePoll();
 
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
 
     private void getActivePoll() {
         SharedPreferences sharedpreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
@@ -174,6 +188,7 @@ public class PollActivity extends AppCompatActivity implements AdapterView.OnIte
                                     ArrayAdapter<FoodItem> dataAdapter = new ArrayAdapter<FoodItem>(PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
 // Apply the adapter to the spinner
                                     firstChoiceSpinner.setAdapter(dataAdapter);
+                                    firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(true));
                                 }
                             } else {
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
