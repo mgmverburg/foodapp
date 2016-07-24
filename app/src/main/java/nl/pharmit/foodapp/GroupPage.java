@@ -46,8 +46,8 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedpreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
-        username = sharedpreferences.getString(getResources().getString(R.string.USERNAME), null);
+        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
 
     }

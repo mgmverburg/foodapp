@@ -2,13 +2,12 @@ package nl.pharmit.foodapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 public class PollActivity extends AppCompatActivity {
-    String pollID;
+    String pollID, username, groupID;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoices = new ArrayList<FoodItem>();
+    SharedPreferences sharedPreferences;
+    ArrayAdapter<FoodItem> dataAdapter;
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
         boolean firstChoice;
@@ -43,7 +44,7 @@ public class PollActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
             FoodItem selectedChoice =  (FoodItem) parent.getItemAtPosition(pos);
-
+            updateChoice(selectedChoice, this.firstChoice);
 
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
@@ -59,7 +60,12 @@ public class PollActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poll);
 
+        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
+        this.username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
+        this.groupID = sharedPreferences.getString(getResources().getString(R.string.GROUPID), null);
+
         firstChoiceSpinner = (Spinner) findViewById(R.id.spinnerFirst);
+//        retrieveChoice(true);
 
         secondChoiceSpinner = (Spinner) findViewById(R.id.spinnerSecond);
 
@@ -133,14 +139,13 @@ public class PollActivity extends AppCompatActivity {
                                     for (int i=0;i<foodOptions.length();i++){
                                         boolean lastItem = false;
                                         if (i == foodOptions.length() - 1) {
+//                                            Toast.makeText(PollActivity.this, "test", Toast.LENGTH_LONG).show();
                                             lastItem = true;
                                         }
                                         JSONObject foodOption = foodOptions.getJSONObject(i);
                                         getFood(foodOption.getString("FID"), lastItem);
                                     }
                                 }
-
-//
                             } else {
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
@@ -165,7 +170,112 @@ public class PollActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
 
+    private void retrieveChoice(final boolean firstChoice) {
+        final String paramUsername = this.username;
+        final String paramGID = this.groupID;
+        int fileName;
+        if (firstChoice) {
+            fileName = R.string.getFirstChoice;
+        } else {
+            fileName = R.string.getSecondChoice;
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(fileName) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
+                                String foodID = jObj.getString(getResources().getString(R.string.FOODID));
+                                if (firstChoice) {
+                                    int spinnerPosition = dataAdapter.getPosition(new FoodItem(foodID, foodName));
+                                    firstChoiceSpinner.setSelection(spinnerPosition);
+                                    firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(true));
+                                }
+//
+//                                foodChoices.add(new FoodItem(paramFID, foodName));
+                            } else {
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void updateChoice(FoodItem choice, boolean firstChoice) {
+        final String paramFID = choice.getFoodID();
+        final String paramUsername = this.username;
+        final String paramGID = this.groupID;
+        int fileName;
+        if (firstChoice) {
+            fileName = R.string.updateFirstChoice;
+        } else {
+            fileName = R.string.updateSecondChoice;
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(fileName) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
+//                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
+//                                foodChoices.add(new FoodItem(paramFID, foodName));
+                            } else {
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.FOODID), paramFID);
+                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void getFood(String foodID, boolean lastItemParam) {
@@ -185,10 +295,11 @@ public class PollActivity extends AppCompatActivity {
                                 String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
                                 foodChoices.add(new FoodItem(paramFID, foodName));
                                 if (lastItem) {
-                                    ArrayAdapter<FoodItem> dataAdapter = new ArrayAdapter<FoodItem>(PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
+
+                                     dataAdapter = new ArrayAdapter<FoodItem>(PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
 // Apply the adapter to the spinner
                                     firstChoiceSpinner.setAdapter(dataAdapter);
-                                    firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(true));
+                                    retrieveChoice(true);
                                 }
                             } else {
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();

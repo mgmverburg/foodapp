@@ -33,6 +33,10 @@
     <string name="getFoodOptions">"GetAllPollFood.php"</string>
     <string name="getActivePoll">"GetCurrentPoll.php"</string>
     <string name="getFood">"GetFood.php"</string>
+    <string name="updateFirstChoice">"UpdatePollFirstChoice.php"</string>
+    <string name="updateSecondChoice">"UpdatePollSecondChoice.php"</string>
+    <string name="getFirstChoice">"GetPollFoodFirstChoice.php"</string>
+    <string name="getSecondChoice">"GetPollFoodSecondChoice.php"</string>
 
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
