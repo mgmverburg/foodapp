@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".DummyActivity"></activity>
         <activity android:name=".GroupPage"></activity>
-        <activity android:name=".AddNewPoll"></activity>
+        <activity android:name=".PollPage"></activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
