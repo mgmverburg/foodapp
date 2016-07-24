@@ -17,10 +17,21 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   //it can go wrong if the username is not valid, because of the foreign key constraint
   //or if the groupname is too long
   if ($groupStatementSuccess) {
-    $response["isError"] = FALSE;
-    $response["success_msg"] = "You successfully created a new group";
+    $GID =  mysqli_insert_id($connection);
+    $userGroupStatement = mysqli_prepare($connection, "INSERT INTO User_Group (GID, username) VALUES (?, ?)");
+    mysqli_stmt_bind_param($userGroupStatement, "ss", $GID, $username);
+    $userGroupStatementSuccess = mysqli_stmt_execute($userGroupStatement);
+
+    if ($userGroupStatementSuccess) {
+      $response["isError"] = FALSE;
+      $response["success_msg"] = "You successfully created a new group";
+    } else {
+      $response["error_msg"] = "The user " . $username . " does not exist";
+    }
+    mysqli_stmt_close($userGroupStatement);
   } else {
-    $response["error_msg"] = mysqli_error($connection);
+    //@TODO: might need to be changed depending on name requirements or admin restrictions
+    $response["error_msg"] = "Either the user is already admin of a group or the group name is invalid";
   }
   mysqli_stmt_close($groupStatement);
 

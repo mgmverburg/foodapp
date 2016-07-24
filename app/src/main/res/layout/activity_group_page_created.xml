@@ -63,5 +63,14 @@
             android:layout_alignStart="@+id/buttondisband"
             android:layout_marginBottom="15dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:layout_below="@+id/group_name"
+        android:layout_alignRight="@+id/group_name"
+        android:layout_alignEnd="@+id/group_name" />
+
 
 </RelativeLayout>
