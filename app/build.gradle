@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24'
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         applicationId "nl.pharmit.foodapp"
@@ -22,10 +22,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/classes.jar')
-    compile 'com.android.support:appcompat-v7:24.1.0'
-    compile 'com.android.support:design:24.1.0'
-    compile 'com.google.android.gms:play-services-appindexing:9.2.1'
-    compile 'com.android.support:support-v4:24.1.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.android.support:support-v4:24.0.0-beta1'
     compile 'com.github.clans:fab:1.6.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
     testCompile 'junit:junit:4.12'

@@ -27,12 +27,14 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
     private final Context context;
     private final List<FoodItem> values;
     private final String pollID;
+    private final CustomListener<String> listener;
 
-    public CreatePollFoodArrayAdapter(Context context, List<FoodItem> values, String pollID) {
+    public CreatePollFoodArrayAdapter(Context context, CustomListener<String> listener, List<FoodItem> values, String pollID) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
         this.pollID = pollID;
+        this.listener = listener;
     }
 
 
@@ -67,7 +69,7 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
         return rowView;
     }
 
-    static public void removePollFoodOption(String foodID, String pollID, Context contextParam) {
+     public void removePollFoodOption(String foodID, String pollID, Context contextParam) {
         final String paramFoodID = foodID;
         final String paramPollID = pollID;
         final Context context = contextParam;
@@ -85,7 +87,7 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                ((CustomListener<String>)context).getResult("");
+                                CreatePollFoodArrayAdapter.this.listener.getResult("test");
                                 //reload page with data
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();

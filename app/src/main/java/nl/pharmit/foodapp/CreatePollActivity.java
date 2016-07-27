@@ -33,10 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreatePollActivity extends AppCompatActivity implements CustomListener<String>{
+public class CreatePollActivity extends AppCompatActivity implements CustomListener<String> {
     TextView dinnerTime, deadline;
     ListView listFoodChoices;
-    Button addFood;
+    Button addFood, startPoll;
     List<FoodItem> foodChoices = new ArrayList<FoodItem>();
     RequestQueue requestQueue;
     Spinner spinner;
@@ -44,7 +44,9 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
     SharedPreferences sharedPreferences;
     String pollID, groupID;
     private List<FoodItem> data;
-    int requestCount;
+    int requestCount, spinnerCount = 0 , spinnerInitializedCount = 0;//this counts how many Gallery's are on the UI
+
+
 
 
     @Override
@@ -62,6 +64,8 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         listFoodChoices = (ListView) findViewById(R.id.listViewPollChoices);
         spinner = (Spinner) findViewById(R.id.spinner);
         addFood = (Button) findViewById(R.id.addFoodButton);
+        startPoll = (Button) findViewById(R.id.startPollButton);
+        spinnerCount=1;
 
         RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
         {
@@ -203,38 +207,15 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
                                 if (foodOptions != null) {
                                     for (int i=0;i < foodOptions.length();i++){
-                                        boolean lastItem = false;
-                                        if (i == foodOptions.length() - 1) {
-//                                            Toast.makeText(PollActivity.this, "test", Toast.LENGTH_LONG).show();
-                                            lastItem = true;
-                                        }
                                         JSONObject foodOption = foodOptions.getJSONObject(i);
                                         String foodName = foodOption.getString(getResources().getString(R.string.FOODNAME));
                                         String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
                                         foodChoices.add(new FoodItem(foodID, foodName));
                                     }
                                 }
-                                dataAdapter = new ArrayAdapter<FoodItem>(CreatePollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
-// Apply the adapter to the spinner
-                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                                        FoodItem selectedChoice =  (FoodItem) adapterView.getItemAtPosition(pos);
-                                        addOption(selectedChoice);
-                                    }
 
-                                    @Override
-                                    public void onNothingSelected(AdapterView<?> adapterView) {
+                                lastInitialization();
 
-                                    }
-                                });
-                                spinner.setAdapter(dataAdapter);
-                                addFood.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        spinner.performClick();
-                                    }
-                                });
 
                             } else {
                                 Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
@@ -305,18 +286,21 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         for (int i = 0; i < types.length(); i++) {
             final JSONObject type = types.getJSONObject(i);
 //            final boolean lastItem = (i == types.length() - 1);
-            RequestManager.getInstance(this).getFood(type.getString(getResources().getString(R.string.FOODID)), new CustomListener<JSONObject>()
+            Log.d("Test", "food type: " + type.getString(getResources().getString(R.string.FOODID)));
+
+            final String foodID = type.getString(getResources().getString(R.string.FOODID));
+            RequestManager.getInstance(this).getFood(foodID, new CustomListener<JSONObject>()
             {
                 @Override
                 public void getResult(JSONObject result) throws JSONException {
                     if (!(result == null)) {
                         requestCount++;
-                        Log.d("Test", result.getString(getResources().getString(R.string.FOODNAME)));
-                        data.add(new FoodItem(result.getString(getResources().getString(R.string.FOODID)),
-                                result.getString(getResources().getString(R.string.FOODNAME))));
+                        String foodName = result.getString(getResources().getString(R.string.FOODNAME));
+                        Log.d("Test", foodName);
+                        data.add(new FoodItem(foodID, foodName));
                         if (requestCount == totalNumberRequests) {
                             Log.d("Test", "last item processed");
-                            CreatePollFoodArrayAdapter adapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this, data, CreatePollActivity.this.pollID);
+                            CreatePollFoodArrayAdapter adapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, data, CreatePollActivity.this.pollID);
 //                            ArrayAdapter<FoodItem> adapter = new ArrayAdapter<FoodItem>(CreatePollActivity.this, android.R.layout.simple_spinner_item, data);
                             listFoodChoices.setAdapter(adapter);
                         }
@@ -326,8 +310,47 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         }
     }
 
+    private void lastInitialization() {
+        dataAdapter = new ArrayAdapter<FoodItem>(CreatePollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
+// Apply the adapter to the spinner
+        spinner.setAdapter(dataAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                if (spinnerInitializedCount < spinnerCount)
+                {
+                    spinnerInitializedCount++;
+                }
+                else {
+                    FoodItem selectedChoice = (FoodItem) adapterView.getItemAtPosition(pos);
+                    addOption(selectedChoice);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        addFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinner.performClick();
+            }
+        });
+
+        startPoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreatePollActivity.this.createNewPoll();
+            }
+        });
+    }
+
     @Override
-    public void getResult(String result) {
+    public void getResult(String string) {
+        Log.d("Test", "test");
         retrievePollFoodOptions();
     }
 
