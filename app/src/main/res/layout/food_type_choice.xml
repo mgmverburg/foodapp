@@ -44,15 +44,6 @@
         fab:menu_shadowYOffset="4dp"
         fab:menu_showShadow="true">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/material_design_floating_action_menu_item1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_history"
-            fab:fab_label="Poll history"
-            fab:fab_size="mini"
-            fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/material_design_floating_action_menu_item2"
@@ -62,17 +53,19 @@
             fab:fab_label="Favorite polls"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"/>
+            fab:fab_colorPressed="#0d7077"
+            android:onClick="addNewNoteFunction"/>
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/material_design_floating_action_menu_item3"
+            android:id="@+id/foodtype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_food_type"
             fab:fab_label="Food type"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"/>
+            fab:fab_colorPressed="#0d7077"
+            android:onClick="addNewNoteFunction"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/material_design_floating_action_menu_item4"
@@ -82,7 +75,8 @@
             fab:fab_label="Add new poll"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"/>
+            fab:fab_colorPressed="#0d7077"
+            android:onClick="addNewNoteFunction"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 </RelativeLayout>
