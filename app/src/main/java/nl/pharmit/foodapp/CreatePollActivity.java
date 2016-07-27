@@ -342,7 +342,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
             }
         });
 

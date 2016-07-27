@@ -34,20 +34,30 @@ public class PollActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ArrayAdapter<FoodItem> dataAdapter;
     RequestQueue requestQueue;
+    int requestCount;
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
         private boolean firstChoice;
+        private int spinnerInitializedCount = 0, spinnerCount = 0;
 
         //boolean indicates if it is firstChoice or not
         public onItemSelectedListener(boolean firstChoice) {
             this.firstChoice = firstChoice;
+            this.spinnerCount = 1;
+
         }
 
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            FoodItem selectedChoice =  (FoodItem) parent.getItemAtPosition(pos);
+//            if (spinnerInitializedCount < spinnerCount)
+//            {
+//                spinnerInitializedCount++;
+//            }
+//            else {
+                FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
 //            Log.d("Test", "selected choice: " + selectedChoice.toString());
-            updateChoice(selectedChoice, this.firstChoice);
+                updateChoice(selectedChoice, this.firstChoice);
+//            }
 
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
@@ -87,22 +97,19 @@ public class PollActivity extends AppCompatActivity {
                         public void getResult(JSONArray result) throws JSONException {
                             if (!(result == null))
                             {
+                                final int totalNumberRequests = result.length();
+                                requestCount = 0;
                                 for (int i=0;i<result.length();i++){
-                                    boolean lastItem = false;
-                                    if (i == result.length() - 1) {
-//                                            Toast.makeText(PollActivity.this, "test", Toast.LENGTH_LONG).show();
-                                        lastItem = true;
-                                    }
                                     JSONObject foodOption = null;
                                     foodOption = result.getJSONObject(i);
                                     final String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
-                                    final boolean lastItemBool = lastItem;
                                     RequestManager.getInstance(PollActivity.this).getFood(foodID, new CustomListener<JSONObject>() {
                                         @Override
                                         public void getResult(JSONObject object) throws JSONException {
+                                            requestCount++;
                                             String foodName = object.getString(getResources().getString(R.string.FOODNAME));
                                             foodChoices.add(new FoodItem(foodID, foodName));
-                                            if (lastItemBool) {
+                                            if (requestCount == totalNumberRequests) {
                                                 dataAdapter = new ArrayAdapter<FoodItem>(PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
                                                 firstChoiceSpinner.setAdapter(dataAdapter);
                                                 retrieveChoice(true);
