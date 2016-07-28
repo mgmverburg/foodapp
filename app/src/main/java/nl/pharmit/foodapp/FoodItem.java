@@ -26,4 +26,15 @@ public class FoodItem {
     public String toString() {
         return foodName;
     }
+
+    @Override
+    public boolean equals(Object otherItem) {
+        if (otherItem instanceof FoodItem) {
+            if (((FoodItem) otherItem).getFoodID().equals(this.getFoodID())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

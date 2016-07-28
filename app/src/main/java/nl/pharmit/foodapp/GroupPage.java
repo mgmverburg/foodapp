@@ -46,8 +46,8 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedpreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
-        username = sharedpreferences.getString(getResources().getString(R.string.USERNAME), null);
+        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
 
     }
@@ -108,7 +108,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GroupPage.this, PollActivity.class));
+                startActivity(new Intent(GroupPage.this, CreatePollActivity.class));
             }
         });
         if (hasGroup) {
@@ -285,7 +285,6 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         requestQueue.add(stringRequest);
 
     }
-
     private void updateListUsers(JSONArray members) throws JSONException {
         ListView lv = (ListView) findViewById(R.id.list);
 //        lv.setOnClickListener(null);
