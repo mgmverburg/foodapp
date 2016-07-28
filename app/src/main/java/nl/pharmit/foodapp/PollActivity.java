@@ -38,7 +38,7 @@ public class PollActivity extends AppCompatActivity {
     ArrayAdapter<FoodItem> firstChoiceDataAdapter, secondChoiceDataAdapter;
     RequestQueue requestQueue;
     int requestCount;
-    FoodItem noselection;
+    FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
 
@@ -196,32 +196,31 @@ public class PollActivity extends AppCompatActivity {
 //                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
                                 String foodID = jObj.getString(getResources().getString(R.string.FOODID));
 //                                Log.d("Test", "fisrt choice: ");
+                                FoodItem choice =  new FoodItem(foodID, "");
 
                                 if (firstChoice) {
-                                    FoodItem firstChoice = new FoodItem(foodID, "");
-                                    int spinnerPosition = firstChoiceDataAdapter.getPosition(firstChoice);
-                                    secondChoiceDataAdapter.remove(firstChoice);
+                                    oldFirstChoice = choice;
+                                    if (oldSecondChoice != null && oldSecondChoice.equals(choice)) {
+                                        resetSpinnerSelection(!firstChoice);
+                                    }
                                     firstChoiceDataAdapter.remove(noselection);
+                                    int spinnerPosition = firstChoiceDataAdapter.getPosition(choice);
+
                                     firstChoiceSpinner.setSelection(spinnerPosition);
                                 } else {
-                                    FoodItem secondChoice = new FoodItem(foodID, "");
-                                    int spinnerPosition = secondChoiceDataAdapter.getPosition(secondChoice);
-                                    firstChoiceDataAdapter.remove(secondChoice);
+
+                                    oldSecondChoice = choice;
+                                    if (oldFirstChoice != null && oldFirstChoice.equals(choice)) {
+                                        resetSpinnerSelection(!firstChoice);
+                                    }
                                     secondChoiceDataAdapter.remove(noselection);
+                                    int spinnerPosition = secondChoiceDataAdapter.getPosition(choice);
                                     secondChoiceSpinner.setSelection(spinnerPosition);
                                 }
 //
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
                             } else {
-                                if (firstChoice) {
-                                    firstChoiceDataAdapter.insert(noselection, 0);
-                                    int spinnerPosition = firstChoiceDataAdapter.getPosition(noselection);
-                                    firstChoiceSpinner.setSelection(spinnerPosition);
-                                } else {
-                                    secondChoiceDataAdapter.insert(noselection, 0);
-                                    int spinnerPosition = secondChoiceDataAdapter.getPosition(noselection);
-                                    secondChoiceSpinner.setSelection(spinnerPosition);
-                                }
+                                resetSpinnerSelection(firstChoice);
 //                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
                             if (firstChoice) {
@@ -251,6 +250,20 @@ public class PollActivity extends AppCompatActivity {
 
 //        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void resetSpinnerSelection(boolean firstChoice) {
+        if (firstChoice) {
+            firstChoiceDataAdapter.remove(noselection);
+            firstChoiceDataAdapter.insert(noselection, 0);
+            int spinnerPosition = firstChoiceDataAdapter.getPosition(noselection);
+            firstChoiceSpinner.setSelection(spinnerPosition);
+        } else {
+            secondChoiceDataAdapter.remove(noselection);
+            secondChoiceDataAdapter.insert(noselection, 0);
+            int spinnerPosition = secondChoiceDataAdapter.getPosition(noselection);
+            secondChoiceSpinner.setSelection(spinnerPosition);
+        }
     }
 
     private void updateChoice(FoodItem choice, final boolean firstChoice) {
