@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,6 +39,8 @@ public class PollActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     int requestCount;
     FoodItem noselection;
+    ToggleButton nopreference;
+    ToggleButton notjoining;
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
         private boolean firstChoice;
@@ -80,6 +84,34 @@ public class PollActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         this.username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         this.groupID = sharedPreferences.getString(getResources().getString(R.string.GROUPID), null);
+        nopreference = (ToggleButton) findViewById(R.id.nopreference);
+        notjoining = (ToggleButton) findViewById(R.id.notjoining);
+
+        nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    notjoining.setChecked(false);
+                    nopreference.setEnabled(false);
+                }
+                else {
+                    nopreference.setEnabled(true);
+
+                }
+            }
+        });
+
+        notjoining.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    nopreference.setChecked(false);
+                    notjoining.setEnabled(false);
+                }
+                else {
+                    notjoining.setEnabled(true);
+                }
+            }
+        });
+
 
         firstChoiceSpinner = (Spinner) findViewById(R.id.spinnerFirst);
 //        retrieveChoice(true);
