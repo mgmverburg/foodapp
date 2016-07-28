@@ -52,7 +52,7 @@ public class ArrayAdapterFoodType extends ArrayAdapter<FoodItem> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                removePollFoodOption(rowFoodID, context);
             }
         });
         return rowView;
