@@ -30,24 +30,37 @@ import java.util.Map;
 public class PollActivity extends AppCompatActivity {
     String pollID, username, groupID;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
-    List<FoodItem> foodChoices = new ArrayList<FoodItem>();
+    List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
+    List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
     SharedPreferences sharedPreferences;
-    ArrayAdapter<FoodItem> dataAdapter;
+    ArrayAdapter<FoodItem> firstChoiceDataAdapter, secondChoiceDataAdapter;
     RequestQueue requestQueue;
+    int requestCount;
+    FoodItem noselection;
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
         private boolean firstChoice;
+        private int spinnerInitializedCount = 0, spinnerCount = 0;
 
         //boolean indicates if it is firstChoice or not
         public onItemSelectedListener(boolean firstChoice) {
             this.firstChoice = firstChoice;
+            this.spinnerCount = 1;
         }
 
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            FoodItem selectedChoice =  (FoodItem) parent.getItemAtPosition(pos);
+//            if (spinnerInitializedCount < spinnerCount)
+//            {
+//                spinnerInitializedCount++;
+//            }
+//            else {
+                FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
+            if (!selectedChoice.equals(noselection)) {
 //            Log.d("Test", "selected choice: " + selectedChoice.toString());
-            updateChoice(selectedChoice, this.firstChoice);
+                updateChoice(selectedChoice, this.firstChoice);
+            }
+//            }
 
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
@@ -73,6 +86,9 @@ public class PollActivity extends AppCompatActivity {
 
         secondChoiceSpinner = (Spinner) findViewById(R.id.spinnerSecond);
 
+        noselection = new FoodItem("0", "Select choice");
+//        foodChoices.add(noselection);
+
         RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
         {
             @Override
@@ -87,25 +103,28 @@ public class PollActivity extends AppCompatActivity {
                         public void getResult(JSONArray result) throws JSONException {
                             if (!(result == null))
                             {
+                                final int totalNumberRequests = result.length();
+                                requestCount = 0;
                                 for (int i=0;i<result.length();i++){
-                                    boolean lastItem = false;
-                                    if (i == result.length() - 1) {
-//                                            Toast.makeText(PollActivity.this, "test", Toast.LENGTH_LONG).show();
-                                        lastItem = true;
-                                    }
                                     JSONObject foodOption = null;
                                     foodOption = result.getJSONObject(i);
                                     final String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
-                                    final boolean lastItemBool = lastItem;
                                     RequestManager.getInstance(PollActivity.this).getFood(foodID, new CustomListener<JSONObject>() {
                                         @Override
                                         public void getResult(JSONObject object) throws JSONException {
+                                            requestCount++;
                                             String foodName = object.getString(getResources().getString(R.string.FOODNAME));
-                                            foodChoices.add(new FoodItem(foodID, foodName));
-                                            if (lastItemBool) {
-                                                dataAdapter = new ArrayAdapter<FoodItem>(PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoices);
-                                                firstChoiceSpinner.setAdapter(dataAdapter);
+                                            foodChoicesFirst.add(new FoodItem(foodID, foodName));
+                                            foodChoicesSecond.add(new FoodItem(foodID, foodName));
+                                            if (requestCount == totalNumberRequests) {
+                                                firstChoiceDataAdapter = new ArrayAdapter<FoodItem>
+                                                        (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesFirst);
+                                                secondChoiceDataAdapter = new ArrayAdapter<FoodItem>
+                                                        (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesSecond);
+                                                firstChoiceSpinner.setAdapter(firstChoiceDataAdapter);
+                                                secondChoiceSpinner.setAdapter(secondChoiceDataAdapter);
                                                 retrieveChoice(true);
+                                                retrieveChoice(false);
                                             }
                                         }
                                     });
@@ -131,9 +150,6 @@ public class PollActivity extends AppCompatActivity {
         } else {
             fileName = R.string.getSecondChoice;
         }
-        Log.d("Test", "username: " + paramUsername);
-        Log.d("Test", "pollID: " + paramPID);
-        Log.d("Test", "fileName" + String.valueOf(getResources().getString(fileName)));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(fileName) ,
                 new Response.Listener<String>() {
                     @Override
@@ -143,20 +159,43 @@ public class PollActivity extends AppCompatActivity {
                         try {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
+
                             if (!isError) {
-                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
+//                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
                                 String foodID = jObj.getString(getResources().getString(R.string.FOODID));
-                                Log.d("Test", "fisrt choice: ");
+//                                Log.d("Test", "fisrt choice: ");
+
                                 if (firstChoice) {
-                                    int spinnerPosition = dataAdapter.getPosition(new FoodItem(foodID, foodName));
-//                                    firstChoiceSpinner.setSelection(spinnerPosition);
-                                    firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(true));
+                                    FoodItem firstChoice = new FoodItem(foodID, "");
+                                    int spinnerPosition = firstChoiceDataAdapter.getPosition(firstChoice);
+                                    secondChoiceDataAdapter.remove(firstChoice);
+                                    firstChoiceDataAdapter.remove(noselection);
+                                    firstChoiceSpinner.setSelection(spinnerPosition);
+                                } else {
+                                    FoodItem secondChoice = new FoodItem(foodID, "");
+                                    int spinnerPosition = secondChoiceDataAdapter.getPosition(secondChoice);
+                                    firstChoiceDataAdapter.remove(secondChoice);
+                                    secondChoiceDataAdapter.remove(noselection);
+                                    secondChoiceSpinner.setSelection(spinnerPosition);
                                 }
 //
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
                             } else {
-                                Log.d("Test", "error");
-                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                                if (firstChoice) {
+                                    firstChoiceDataAdapter.insert(noselection, 0);
+                                    int spinnerPosition = firstChoiceDataAdapter.getPosition(noselection);
+                                    firstChoiceSpinner.setSelection(spinnerPosition);
+                                } else {
+                                    secondChoiceDataAdapter.insert(noselection, 0);
+                                    int spinnerPosition = secondChoiceDataAdapter.getPosition(noselection);
+                                    secondChoiceSpinner.setSelection(spinnerPosition);
+                                }
+//                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                            if (firstChoice) {
+                                firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(firstChoice));
+                            } else {
+                                secondChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(firstChoice));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -182,10 +221,10 @@ public class PollActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void updateChoice(FoodItem choice, boolean firstChoice) {
+    private void updateChoice(FoodItem choice, final boolean firstChoice) {
         final String paramFID = choice.getFoodID();
         final String paramUsername = this.username;
-        final String paramGID = this.groupID;
+        final String paramPID = this.pollID;
         int fileName;
         if (firstChoice) {
             fileName = R.string.updateFirstChoice;
@@ -207,6 +246,7 @@ public class PollActivity extends AppCompatActivity {
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
 //                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
+                                retrieveChoice(firstChoice);
                             } else {
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
@@ -226,7 +266,7 @@ public class PollActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(getResources().getString(R.string.USERNAME), paramUsername);
                 params.put(getResources().getString(R.string.FOODID), paramFID);
-                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
                 return params;
             }
         };

@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
       if ($userGroupStatementSuccess) {
         $response["isError"] = FALSE;
-        $assocArray = mysqli_fetch_assoc($groupResult);
+        $assocArray = mysqli_fetch_assoc($groupResult); //this is if we want to respond with the user's info
         $response["success_msg"] = "You successfully added " . $username . ' to the group "' . $assocArray["name"] . '"';
       } else {
         //@TODO: this changes if multiple group membership is possible
