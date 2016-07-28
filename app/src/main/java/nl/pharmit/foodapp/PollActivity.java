@@ -59,8 +59,11 @@ public class PollActivity extends AppCompatActivity {
 //                spinnerInitializedCount++;
 //            }
 //            else {
+
                 FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
             if (!selectedChoice.equals(noselection)) {
+                notjoining.setChecked(false);
+                nopreference.setChecked(false);
 //            Log.d("Test", "selected choice: " + selectedChoice.toString());
                 updateChoice(selectedChoice, this.firstChoice);
             }
