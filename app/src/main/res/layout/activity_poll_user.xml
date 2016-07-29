@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/first"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="26dp">
+        android:layout_below="@+id/toggleButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,8 +90,9 @@
         android:layout_height="wrap_content"
         android:text="Time left: --:--:--"
         android:id="@+id/countdown"
-        android:layout_alignRight="@+id/first"
-        android:layout_alignEnd="@+id/first" />
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/toggleButton2"
+        android:layout_toStartOf="@+id/toggleButton2" />
 
     <ToggleButton
         android:layout_width="wrap_content"
@@ -122,7 +123,7 @@
         android:layout_height="50dp"
         android:id="@+id/imageView2"
         android:background="@drawable/background"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
