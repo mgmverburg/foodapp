@@ -69,6 +69,7 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
         FindUserGroup(username);
 
 
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -103,7 +104,7 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
                                     polltab.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            startActivity(new Intent(GroupPage.this, PollPage.class));
+                                            startActivity(new Intent(GroupPage.this, PollActivity.class));
                                             polltab.setChecked(false);
                                         }
                                     });
