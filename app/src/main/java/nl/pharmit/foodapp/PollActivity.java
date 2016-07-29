@@ -50,6 +50,8 @@ public class PollActivity extends AppCompatActivity {
     boolean firstRetrieval;
     ToggleButton polltab2;
     ToggleButton grouptab2;
+    ToggleButton polltab3;
+    ToggleButton grouptab3;
 
 
 
@@ -91,6 +93,18 @@ public class PollActivity extends AppCompatActivity {
                         } else {
                             message.setText("You are not yet part of a group, so you will not see any polls.");
                         }
+                        polltab3 = (ToggleButton) findViewById(R.id.polltab2);
+                        grouptab3 =(ToggleButton) findViewById(R.id.grouptab2);
+
+                        polltab3.setChecked(true);
+                        polltab3.setEnabled(false);
+                        grouptab3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(PollActivity.this, GroupPage.class));
+                                polltab3.setChecked(false);
+                            }
+                        });
                     }
                 }
 
@@ -163,6 +177,18 @@ public class PollActivity extends AppCompatActivity {
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
         timer = (TextView) findViewById(R.id.countdown);
+        polltab3 = (ToggleButton) findViewById(R.id.toggleButton2);
+        grouptab3 =(ToggleButton) findViewById(R.id.toggleButton);
+
+        polltab3.setChecked(true);
+        polltab3.setEnabled(false);
+        grouptab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PollActivity.this, GroupPage.class));
+                polltab3.setChecked(false);
+            }
+        });
 
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

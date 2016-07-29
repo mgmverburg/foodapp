@@ -4,9 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.pharmit.foodapp.PollActivity">
 
     <LinearLayout
@@ -64,12 +61,11 @@
         android:textOff="No Preference"
         android:textOn="No Preference"
         android:id="@+id/nopreference"
-        android:layout_marginTop="48dp"
         android:background="@drawable/toggle_selector"
         android:textColor="@drawable/toggle_text_color"
-        android:layout_marginLeft="26dp"
-        android:layout_marginStart="26dp"
-        android:layout_below="@+id/linearLayout2"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_below="@+id/countdown"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -81,9 +77,11 @@
         android:id="@+id/notjoining"
         android:background="@drawable/toggle_selector"
         android:textColor="@drawable/toggle_text_color"
-        android:layout_alignTop="@+id/nopreference"
-        android:layout_toRightOf="@+id/nopreference"
-        android:layout_toEndOf="@+id/nopreference" />
+        android:layout_below="@+id/countdown"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="28dp"
+        android:layout_marginEnd="28dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,8 +89,29 @@
         android:text="Time left: --:--:--"
         android:id="@+id/countdown"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/toggleButton2"
-        android:layout_toStartOf="@+id/toggleButton2" />
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/imageView2"
+        android:background="@drawable/background"
+        android:layout_alignTop="@+id/toggleButton"
+        android:layout_alignLeft="@+id/first"
+        android:layout_alignStart="@+id/first" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Poll"
+        android:textOff="Poll"
+        android:textColor="#ffffff"
+        android:id="@+id/toggleButton2"
+        android:background="@drawable/tab_style"
+        android:layout_above="@+id/countdown"
+        android:layout_alignLeft="@+id/notjoining"
+        android:layout_alignStart="@+id/notjoining"
+        android:layout_marginBottom="190dp" />
 
     <ToggleButton
         android:layout_width="wrap_content"
@@ -103,29 +122,9 @@
         android:background="@drawable/tab_style"
         android:textColor="#ffffff"
         android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="Poll"
-        android:textOff="Poll"
-        android:textColor="#ffffff"
-        android:id="@+id/toggleButton2"
-        android:background="@drawable/tab_style"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:id="@+id/imageView2"
-        android:background="@drawable/background"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignBottom="@+id/toggleButton2"
+        android:layout_alignLeft="@+id/nopreference"
+        android:layout_alignStart="@+id/nopreference" />
 
 
     <!--<TextView-->
