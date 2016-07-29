@@ -27,6 +27,14 @@ public class PollPage extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton favoritepolls = (FloatingActionButton) findViewById(R.id.favoritepolls);
+        favoritepolls.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PollPage.this, FavoritePollActivity.class));
+            }
+        });
+
         FloatingActionButton createPoll = (FloatingActionButton) findViewById(R.id.createPoll);
         createPoll.setOnClickListener(new View.OnClickListener() {
             @Override

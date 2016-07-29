@@ -46,6 +46,7 @@ public class PollActivity extends AppCompatActivity {
     FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
+    TextView timer;
     boolean firstRetrieval;
 
 
@@ -142,6 +143,8 @@ public class PollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poll_user);
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
+        timer = (TextView) findViewById(R.id.countdown);
+
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {

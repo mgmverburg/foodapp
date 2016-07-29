@@ -6,16 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,18 +27,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.acl.Group;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by s157218 on 18-7-2016.
  */
-public class GroupPage  extends AppCompatActivity implements AddUserDialogFragment.AddUserDialogListener {
+public class GroupPage extends AppCompatActivity implements AddUserDialogFragment.AddUserDialogListener {
     Button button;
     Context context = this;
     String username, groupID, admin;
@@ -42,6 +50,14 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     FragmentManager fm = getSupportFragmentManager();
     private String[] data;
     SharedPreferences sharedPreferences;
+    ToggleButton polltab;
+
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +66,17 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
 
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void FindUserGroup(String username) {
         final String paramUsername = username;
         boolean hasGroup = false;
         //making HTTP request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getUserGroup) ,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getUserGroup),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -73,6 +93,15 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 editor.putString(getResources().getString(R.string.GROUPID), GroupPage.this.groupID);
                                 editor.commit();
                                 setContentView(R.layout.activity_group_page_created);
+                                polltab = (ToggleButton) findViewById(R.id.polltab);
+                                polltab.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        startActivity(new Intent(GroupPage.this, PollPage.class));
+                                    }
+                                });
+
+
                                 updateGroupInfo();
                             } else {
                                 setContentView(R.layout.activity_group_page);
@@ -103,7 +132,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         requestQueue.add(stringRequest);
     }
 
-    private void setup( boolean hasGroup) {
+    private void setup(boolean hasGroup) {
 
 
         if (hasGroup) {
@@ -153,7 +182,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                     alertDialogBuilder
                             .setMessage(alertMessage)
                             .setCancelable(true)
-                            .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     if (isAdmin) {
                                         deleteGroup();
@@ -164,7 +193,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                     dialog.dismiss();
                                 }
                             })
-                            .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, just close
                                     // the dialog box and do nothing
@@ -181,12 +210,12 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
             });
         } else {
             final Button button = (Button) findViewById(R.id.button);
-            Typeface typeface= Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+            Typeface typeface = Typeface.createFromAsset(getAssets(), "Lato-Regular.ttf");
             button.setText("CREATE GROUP");
             button.setTypeface(typeface);
-            button.setOnClickListener(new View.OnClickListener(){
+            button.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
                     CreateGroupDialogFragment createFragment = CreateGroupDialogFragment.newInstance(GroupPage.this.username);
                     createFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                     // Show DialogFragment
@@ -201,7 +230,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     public void deleteGroup() {
         final String paramGID = this.groupID;
         //making HTTP request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.deleteGroup) ,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.deleteGroup),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -240,11 +269,10 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     }
 
 
-
     private void updateGroupInfo() {
         final String paramGID = this.groupID;
         //making HTTP request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getGroup) ,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getGroup),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -288,6 +316,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         requestQueue.add(stringRequest);
 
     }
+
     private void updateListUsers(JSONArray members) throws JSONException {
         ListView lv = (ListView) findViewById(R.id.list);
 //        lv.setOnClickListener(null);
@@ -312,4 +341,43 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GroupPage Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://nl.pharmit.foodapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GroupPage Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://nl.pharmit.foodapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }

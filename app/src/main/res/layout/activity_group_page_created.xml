@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,7 +13,7 @@
         android:text="Group Name"
         android:id="@+id/group_name"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="68dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -62,14 +63,38 @@
             android:layout_alignStart="@+id/buttondisband"
             android:layout_marginBottom="15dp" />
 
-    <Button
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background" />
+
+    <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button2"
-        android:layout_below="@+id/group_name"
-        android:layout_alignRight="@+id/group_name"
-        android:layout_alignEnd="@+id/group_name" />
+        android:text="Group"
+        android:id="@+id/grouptab"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:textOn="@drawable/toggle_text_color"
+        android:background="@drawable/tab_style"
+        android:state_checked="true"/>
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Poll"
+        android:id="@+id/polltab"
+        android:layout_alignBottom="@+id/grouptab"
+        android:layout_alignRight="@+id/buttonadd"
+        android:layout_alignEnd="@+id/buttonadd"
+        android:textOn="@drawable/toggle_text_color"
+        android:background="@drawable/tab_style"/>
 
 
 </RelativeLayout>
