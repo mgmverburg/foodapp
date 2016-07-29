@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -41,6 +42,7 @@ public class PollActivity extends AppCompatActivity {
     FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
+    TextView timer;
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
         private boolean firstChoice;
@@ -89,6 +91,7 @@ public class PollActivity extends AppCompatActivity {
         this.groupID = sharedPreferences.getString(getResources().getString(R.string.GROUPID), null);
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
+        timer = (TextView) findViewById(R.id.countdown);
 
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
