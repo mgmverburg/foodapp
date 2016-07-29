@@ -28,6 +28,7 @@
         <activity android:name=".GroupPage"></activity>
         <activity android:name=".PollPage"></activity>
         <activity android:name=".FoodTypeActivity"></activity>
+        <activity android:name=".CreatePollActivity"></activity>
         <activity android:name=".PollActivity"></activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

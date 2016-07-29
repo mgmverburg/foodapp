@@ -12,13 +12,14 @@ import com.github.clans.fab.FloatingActionButton;
  */
 public class PollPage extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.food_type_choice);
+        setContentView(R.layout.activity_poll_admin);
 
-        FloatingActionButton history = (FloatingActionButton) findViewById(R.id.foodtype);
-        history.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);
+        foodTypeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Click action
@@ -31,6 +32,15 @@ public class PollPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(PollPage.this, FavoritePollActivity.class));
+            }
+        });
+
+        FloatingActionButton createPoll = (FloatingActionButton) findViewById(R.id.createPoll);
+        createPoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                startActivity(new Intent(PollPage.this, CreatePollActivity.class));
             }
         });
     }

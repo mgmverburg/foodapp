@@ -5,8 +5,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
   //the group ID of the user creating the poll must be passed as parameter
   $GID = $_POST["GID"];
-  $dinner = $_POST["dinner"];
+  $dinnerHour = $_POST["dinnerHour"]
+  $dinnerMinute = $_POST["dinnerMinute"];
   $deadline = $_POST["deadline"];
+  $date = new DateTime('now');
+  date_time_set($date, $dinnerHour, $dinnerMinute);
+  echo $date;
+  // $datetime = date ( $format [, $timestamp = $dinner ] )
 
   require_once("DBConnect.php");
   include("GetGroupFunction.php");

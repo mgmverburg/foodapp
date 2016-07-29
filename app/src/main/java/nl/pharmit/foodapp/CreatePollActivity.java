@@ -2,6 +2,7 @@ package nl.pharmit.foodapp;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -120,6 +121,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                             if (!isError) {
                                 String pollID = jObj.getString(getResources().getString(R.string.POLLID));
 //                                postPollFood(pollID);
+                                startActivity(new Intent(CreatePollActivity.this, PollActivity.class));
                             } else {
                                 Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
@@ -212,6 +214,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
+
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(CreatePollActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override

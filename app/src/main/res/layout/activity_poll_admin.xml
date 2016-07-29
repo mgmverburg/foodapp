@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/material_design_android_floating_action_menu"
+        android:id="@+id/floatingActionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -46,37 +46,45 @@
 
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/favoritepolls"
+            android:id="@+id/favoritePolls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite"
             fab:fab_label="Favorite polls"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"
-            android:onClick="addNewNoteFunction"/>
+            fab:fab_colorPressed="#0d7077" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/foodtype"
+            android:id="@+id/foodType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_food_type"
             fab:fab_label="Food type"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"
-            android:onClick="addNewNoteFunction"/>
+            fab:fab_colorPressed="#0d7077" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/addnewpoll"
+            android:id="@+id/createPoll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_label="Add new poll"
             fab:fab_size="mini"
             fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077"
-            android:onClick="addNewNoteFunction"/>
+            fab:fab_colorPressed="#0d7077" />
 
     </com.github.clans.fab.FloatingActionMenu>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/activePollMessage"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="82dp" />
 </RelativeLayout>
