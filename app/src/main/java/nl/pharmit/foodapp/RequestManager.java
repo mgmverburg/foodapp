@@ -72,7 +72,8 @@ public class RequestManager {
                                 listener.getResult(PID);
 //
                             } else {
-                                Toast.makeText(RequestManager.this.context, jObj.getString(RequestManager.this.context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                                listener.getResult("");
+//                                Toast.makeText(RequestManager.this.context, jObj.getString(RequestManager.this.context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

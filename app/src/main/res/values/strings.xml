@@ -3,6 +3,8 @@
     <string name="title_activity_login_registration">Sign up/in</string>
 
     <!-- Strings related to login -->
+    <string name="error_unsupported">"This function is not yet supported"</string>
+    <string name="poll_already_active">"You cannot create a new poll while one is active"</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="login">Log in</string>
@@ -60,6 +62,7 @@
     <string name="FOODDESCRIPTION">"description"</string>
     <string name="DEADLINETIME">"deadline"</string>
     <string name="DINNERTIME">"dinner"</string>
+    <string name="ISADMIN">"isAdmin"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

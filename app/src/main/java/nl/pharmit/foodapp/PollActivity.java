@@ -1,6 +1,7 @@
 package nl.pharmit.foodapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -19,6 +21,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +35,7 @@ import java.util.Map;
 
 public class PollActivity extends AppCompatActivity {
     String pollID, username, groupID;
+    boolean isAdmin;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
     List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
@@ -43,55 +48,100 @@ public class PollActivity extends AppCompatActivity {
     ToggleButton notjoining;
     boolean firstRetrieval;
 
-    class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
-        private boolean firstChoice;
-        private int spinnerInitializedCount = 0, spinnerCount = 0;
-
-        //boolean indicates if it is firstChoice or not
-        public onItemSelectedListener(boolean firstChoice) {
-            this.firstChoice = firstChoice;
-            this.spinnerCount = 1;
-        }
-
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-//            if (spinnerInitializedCount < spinnerCount)
-//            {
-//                spinnerInitializedCount++;
-//            }
-//            else {
-
-
-                FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
-            if (!selectedChoice.equals(noselection)) {
-                notjoining.setChecked(false);
-                nopreference.setChecked(false);
-//            Log.d("Test", "selected choice: " + selectedChoice.toString());
-                    updateChoice(selectedChoice, this.firstChoice);
-                }
-
-
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_poll);
+
+
         requestQueue = Volley.newRequestQueue(this);
 
         sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         this.username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         this.groupID = sharedPreferences.getString(getResources().getString(R.string.GROUPID), null);
+        this.isAdmin = sharedPreferences.getBoolean(getResources().getString(R.string.ISADMIN), false);
+
+        noselection = new FoodItem("0", "Select choice");
+//        foodChoices.add(noselection);
+
+        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
+        {
+            @Override
+            public void getResult(String pollID)
+            {
+                PollActivity.this.pollID = pollID;
+                if (isAdmin) {
+                    initializeAdminView();
+                } else {
+                    if (!pollID.isEmpty())
+                    {
+                        initializePollVoting(pollID);
+                    } else {
+                        setContentView(R.layout.activity_poll_admin);
+                        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
+                        menu.setEnabled(false);
+                        menu.setVisibility(View.INVISIBLE);
+                        TextView message = (TextView) findViewById(R.id.activePollMessage);
+                        message.setText("There is currently no poll active. Wait for the admin to create one.");
+                    }
+                }
+
+
+
+            }
+        });
+
+    }
+
+    private void initializeAdminView() {
+        setContentView(R.layout.activity_poll_admin);
+
+        //@TODO: show poll vote amounts
+
+        FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);
+        foodTypeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                startActivity(new Intent(PollActivity.this, FoodTypeActivity.class));
+            }
+        });
+
+        FloatingActionButton favoritePollsButton = (FloatingActionButton) findViewById(R.id.favoritePolls);
+        favoritePollsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Toast.makeText(PollActivity.this, getResources().getString(R.string.error_unsupported),  Toast.LENGTH_LONG).show();
+            }
+        });
+
+        FloatingActionButton createPoll = (FloatingActionButton) findViewById(R.id.createPoll);
+        createPoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                if (pollID.isEmpty()) {
+                    startActivity(new Intent(PollActivity.this, CreatePollActivity.class));
+                } else {
+                    Toast.makeText(PollActivity.this, getResources().getString(R.string.poll_already_active),  Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        TextView message = (TextView) findViewById(R.id.activePollMessage);
+        if (pollID.isEmpty()) {
+
+            message.setText("There is currently no poll active");
+        } else {
+            message.setText("There is currently a poll active");
+        }
+    }
+
+    private void initializePollVoting(String pollID) {
+        setContentView(R.layout.activity_poll_user);
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
-
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -100,7 +150,6 @@ public class PollActivity extends AppCompatActivity {
                 }
                 else {
                     nopreference.setEnabled(true);
-
                 }
             }
         });
@@ -123,63 +172,85 @@ public class PollActivity extends AppCompatActivity {
 
         secondChoiceSpinner = (Spinner) findViewById(R.id.spinnerSecond);
 
-        noselection = new FoodItem("0", "Select choice");
-//        foodChoices.add(noselection);
 
-        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
+        RequestManager.getInstance(PollActivity.this).getAllPollFood(PollActivity.this.pollID, new CustomListener<JSONArray>()
         {
             @Override
-            public void getResult(String result)
-            {
-                if (!result.isEmpty())
+            public void getResult(JSONArray result) throws JSONException {
+                if (!(result == null))
                 {
-                    PollActivity.this.pollID = result;
-                    RequestManager.getInstance(PollActivity.this).getAllPollFood(PollActivity.this.pollID, new CustomListener<JSONArray>()
-                    {
-                        @Override
-                        public void getResult(JSONArray result) throws JSONException {
-                            if (!(result == null))
-                            {
-                                final int totalNumberRequests = result.length();
-                                requestCount = 0;
-                                for (int i=0;i<result.length();i++){
-                                    JSONObject foodOption = null;
-                                    foodOption = result.getJSONObject(i);
-                                    final String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
-                                    RequestManager.getInstance(PollActivity.this).getFood(foodID, new CustomListener<JSONObject>() {
-                                        @Override
-                                        public void getResult(JSONObject object) throws JSONException {
-                                            requestCount++;
-                                            String foodName = object.getString(getResources().getString(R.string.FOODNAME));
-                                            foodChoicesFirst.add(new FoodItem(foodID, foodName));
-                                            foodChoicesSecond.add(new FoodItem(foodID, foodName));
-                                            if (requestCount == totalNumberRequests) {
-                                                firstChoiceDataAdapter = new ArrayAdapter<FoodItem>
-                                                        (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesFirst);
-                                                secondChoiceDataAdapter = new ArrayAdapter<FoodItem>
-                                                        (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesSecond);
-                                                firstChoiceSpinner.setAdapter(firstChoiceDataAdapter);
-                                                secondChoiceSpinner.setAdapter(secondChoiceDataAdapter);
-                                                firstRetrieval = true; //sets boolean to true so that we can set the listeners the first time we
-                                                //retrieve the choices
-                                                requestCount = 0;
-                                                retrieveChoice(true);
-                                                retrieveChoice(false);
-                                            }
-                                        }
-                                    });
-
+                    final int totalNumberRequests = result.length();
+                    requestCount = 0;
+                    for (int i=0;i<result.length();i++){
+                        JSONObject foodOption = null;
+                        foodOption = result.getJSONObject(i);
+                        final String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
+                        RequestManager.getInstance(PollActivity.this).getFood(foodID, new CustomListener<JSONObject>() {
+                            @Override
+                            public void getResult(JSONObject object) throws JSONException {
+                                requestCount++;
+                                String foodName = object.getString(getResources().getString(R.string.FOODNAME));
+                                foodChoicesFirst.add(new FoodItem(foodID, foodName));
+                                foodChoicesSecond.add(new FoodItem(foodID, foodName));
+                                if (requestCount == totalNumberRequests) {
+                                    firstChoiceDataAdapter = new ArrayAdapter<FoodItem>
+                                            (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesFirst);
+                                    secondChoiceDataAdapter = new ArrayAdapter<FoodItem>
+                                            (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesSecond);
+                                    firstChoiceSpinner.setAdapter(firstChoiceDataAdapter);
+                                    secondChoiceSpinner.setAdapter(secondChoiceDataAdapter);
+                                    firstRetrieval = true; //sets boolean to true so that we can set the listeners the first time we
+                                    //retrieve the choices
+                                    requestCount = 0;
+                                    retrieveChoice(true);
+                                    retrieveChoice(false);
                                 }
                             }
-                        }
-                    });
+                        });
 
-
+                    }
                 }
             }
         });
-
     }
+
+    class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
+        private boolean firstChoice;
+        private int spinnerInitializedCount = 0, spinnerCount = 0;
+
+        //boolean indicates if it is firstChoice or not
+        public onItemSelectedListener(boolean firstChoice) {
+            this.firstChoice = firstChoice;
+            this.spinnerCount = 1;
+        }
+
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int pos, long id) {
+//            if (spinnerInitializedCount < spinnerCount)
+//            {
+//                spinnerInitializedCount++;
+//            }
+//            else {
+
+
+            FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
+            if (!selectedChoice.equals(noselection)) {
+                notjoining.setChecked(false);
+                nopreference.setChecked(false);
+//            Log.d("Test", "selected choice: " + selectedChoice.toString());
+                updateChoice(selectedChoice, this.firstChoice);
+            }
+
+
+            // An item was selected. You can retrieve the selected item using
+            // parent.getItemAtPosition(pos)
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }
+    }
+
 
     private void retrieveChoice(final boolean firstChoice) {
         final String paramUsername = this.username;

@@ -75,6 +75,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                                 setContentView(R.layout.activity_group_page_created);
                                 updateGroupInfo();
                             } else {
+                                setContentView(R.layout.activity_group_page);
                                 setup(false);
                             }
                         } catch (JSONException e) {
@@ -104,14 +105,15 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
 
     private void setup( boolean hasGroup) {
 
-        Button button2 = (Button) findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GroupPage.this, FoodTypeActivity.class));
-            }
-        });
+
         if (hasGroup) {
+            Button button2 = (Button) findViewById(R.id.button2);
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(GroupPage.this, PollActivity.class));
+                }
+            });
 
             ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
             final String alertMessage;
@@ -133,8 +135,10 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                 alertMessage = "Are you sure you want to leave the group?";
                 invite.invalidate();
                 invite.setVisibility(View.INVISIBLE);
-
             }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(getResources().getString(R.string.ISADMIN), GroupPage.this.isAdmin);
+            editor.commit();
             ImageButton disbandButton = (ImageButton) findViewById(R.id.buttondisband);
             disbandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,7 +180,6 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
                 }
             });
         } else {
-            setContentView(R.layout.activity_group_page);
             final Button button = (Button) findViewById(R.id.button);
             Typeface typeface= Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
             button.setText("CREATE GROUP");
