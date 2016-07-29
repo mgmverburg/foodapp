@@ -48,6 +48,9 @@ public class PollActivity extends AppCompatActivity {
     ToggleButton notjoining;
     TextView timer;
     boolean firstRetrieval;
+    ToggleButton polltab2;
+    ToggleButton grouptab2;
+
 
 
     @Override
@@ -97,6 +100,18 @@ public class PollActivity extends AppCompatActivity {
     private void initializeAdminView() {
         setContentView(R.layout.activity_poll_admin);
 
+        polltab2 = (ToggleButton) findViewById(R.id.polltab2);
+        grouptab2 = (ToggleButton) findViewById(R.id.grouptab2);
+
+        polltab2.setChecked(true);
+        polltab2.setEnabled(false);
+        grouptab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PollActivity.this, GroupPage.class));
+                polltab2.setChecked(false);
+            }
+        });
         //@TODO: show poll vote amounts
 
         FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);

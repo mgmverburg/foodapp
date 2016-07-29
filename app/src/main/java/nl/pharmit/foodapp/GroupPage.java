@@ -52,6 +52,7 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
     private String[] data;
     SharedPreferences sharedPreferences;
     ToggleButton polltab;
+    ToggleButton grouptab;
 
 
     /**
@@ -66,6 +67,7 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
         sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         username = sharedPreferences.getString(getResources().getString(R.string.USERNAME), null);
         FindUserGroup(username);
+
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -95,12 +97,26 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
                                 editor.commit();
                                 setContentView(R.layout.activity_group_page_created);
                                 polltab = (ToggleButton) findViewById(R.id.polltab);
-                                polltab.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        startActivity(new Intent(GroupPage.this, PollPage.class));
-                                    }
-                                });
+                                grouptab = (ToggleButton) findViewById(R.id.grouptab);
+                                grouptab.setChecked(true);
+                                if(grouptab.isChecked()){
+                                    grouptab.setEnabled(false);
+                                    polltab.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            startActivity(new Intent(GroupPage.this, PollActivity.class));
+                                            polltab.setChecked(false);
+                                        }
+                                    });
+
+                                }
+
+
+                                if(polltab.isEnabled() ==  true) {
+                                    grouptab.setChecked(true);
+                                    polltab.setChecked(false);
+                                    grouptab.setEnabled(false);
+                                }
 
 
                                 updateGroupInfo();
