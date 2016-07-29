@@ -27,7 +27,7 @@ public class PollPage extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton favoritepolls = (FloatingActionButton) findViewById(R.id.favoritepolls);
+        FloatingActionButton favoritepolls = (FloatingActionButton) findViewById(R.id.favoritePolls);
         favoritepolls.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

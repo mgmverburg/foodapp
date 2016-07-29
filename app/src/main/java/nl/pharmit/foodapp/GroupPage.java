@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -136,15 +137,8 @@ public class GroupPage extends AppCompatActivity implements AddUserDialogFragmen
 
 
         if (hasGroup) {
-            Button button2 = (Button) findViewById(R.id.button2);
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(GroupPage.this, PollActivity.class));
-                }
-            });
 
-            ImageButton invite = (ImageButton) findViewById(R.id.buttonadd);
+            FloatingActionButton invite = (FloatingActionButton) findViewById(R.id.buttonadd);
             final String alertMessage;
             if (this.username.equals(this.admin)) {
                 isAdmin = true;
