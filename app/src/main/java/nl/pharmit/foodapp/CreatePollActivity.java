@@ -86,7 +86,21 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         data = new ArrayList<FoodItem>();
         pollOptionsAdapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, data, CreatePollActivity.this.pollID);
         listFoodChoices.setAdapter(pollOptionsAdapter);
-        retrieveAllFoodTypes();
+        RequestManager.getInstance(this).retrieveAllFoodTypes(new CustomListener<List<FoodItem>>()
+        {
+            @Override
+            public void getResult(List<FoodItem> result)
+            {
+                if (!result.isEmpty())
+                {
+                    foodTypes.addAll(result);
+                    lastInitialization();
+                    //needs to be replaced with possible loading from saved polls options
+//                    retrievePollFoodOptions();
+                }
+            }
+        });
+
     }
 
     private void createNewPoll() {

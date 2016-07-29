@@ -31,25 +31,13 @@ import java.util.Map;
  * Created by s148494 on 20-7-2016.
  */
 
-public class AddUserDialogFragment extends DialogFragment implements TextView.OnEditorActionListener {
+public class AddFoodDialogFragment extends DialogFragment implements TextView.OnEditorActionListener {
     EditText mEditText;
-    AddUserDialogListener mListener;
-    String groupID;
+    AddFoodDialogListener mListener;
     Context context;
 
-    public interface AddUserDialogListener {
+    public interface AddFoodDialogListener {
         public void onDone(boolean restartActivity);
-    }
-
-    public static AddUserDialogFragment newInstance(String groupID) {
-        AddUserDialogFragment f = new AddUserDialogFragment();
-
-        // Supply num input as an argument.
-        Bundle args = new Bundle();
-        args.putString("GID", groupID);
-        f.setArguments(args);
-
-        return f;
     }
 
     @Override
@@ -57,9 +45,9 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_dialogfragment, container,
                 false);
-        groupID = getArguments().getString("GID");
         mEditText = (EditText) rootView.findViewById(R.id.enterName);
-        getDialog().setTitle("Add user");
+        mEditText.setHint("Enter the food name");
+        getDialog().setTitle("Add food type");
         mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         mEditText.requestFocus();
@@ -88,14 +76,13 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
     View.OnClickListener onOK=
             new View.OnClickListener(){
                 @Override public void onClick(View view){
-                    addUser();
+                    addFood();
                 }
             };
 
-    public void addUser() {
-        final String paramUsername = mEditText.getText().toString();
-        final String paramGID = AddUserDialogFragment.this.groupID;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.addUser) ,
+    public void addFood() {
+        final String paramFoodName = mEditText.getText().toString();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.addFood) ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -126,8 +113,8 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(getResources().getString(R.string.USERNAME), paramUsername);
-                params.put(getResources().getString(R.string.GROUPID), paramGID);
+                params.put(getResources().getString(R.string.FOODNAME), paramFoodName);
+                params.put(getResources().getString(R.string.FOODDESCRIPTION), "");
                 return params;
             }
 
@@ -141,7 +128,7 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
         super.onAttach(context);
         this.context = context;
         try {
-            mListener = (AddUserDialogListener) context;
+            mListener = (AddFoodDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement AddUserDialogListener");
@@ -152,7 +139,7 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
-            addUser();
+            addFood();
         }
         return false;
     }

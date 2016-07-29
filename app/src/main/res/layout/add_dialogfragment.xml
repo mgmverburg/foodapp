@@ -7,7 +7,7 @@
     style='"@android:style/Theme.Dialog"'>
 
     <EditText
-        android:id="@+id/enterUsername"
+        android:id="@+id/enterName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint = "Enter the username"

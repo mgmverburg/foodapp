@@ -29,6 +29,7 @@
     <string name="getUserGroup">"GetUserGroup.php"</string>
     <string name="getGroup">"GetGroup.php"</string>
     <string name="removeUser">"DeleteUserGroup.php"</string>
+    <string name="removeFood">"DeleteFood.php"</string>
     <string name="addUser">"PostUserGroup.php"</string>
     <string name="createGroup">"PostGroup.php"</string>
     <string name="deleteGroup">"DeleteGroup.php"</string>
@@ -39,7 +40,10 @@
     <string name="updateSecondChoice">"UpdatePollSecondChoice.php"</string>
     <string name="getFirstChoice">"GetPollFoodFirstChoice.php"</string>
     <string name="getSecondChoice">"GetPollFoodSecondChoice.php"</string>
+    <string name="removeFirstChoice">"DeletePollFoodFirstChoice.php"</string>
+    <string name="removeSecondChoice">"DeletePollFoodSecondChoice.php"</string>
     <string name="getAllFood">"GetAllFood.php"</string>
+    <string name="addFood">"PostFood.php"</string>
     <string name="addFoodChoice">"PostPollFood.php"</string>
     <string name="removeFoodChoice">"DeletePollFood.php"</string>
     <string name="createNewPoll">"PostPoll.php</string>
@@ -53,6 +57,7 @@
     <string name="FOODITEMS">"items"</string>
     <string name="FOODNAME">"name"</string>
     <string name="FOODID">"FID"</string>
+    <string name="FOODDESCRIPTION">"description"</string>
     <string name="DEADLINETIME">"deadline"</string>
     <string name="DINNERTIME">"dinner"</string>
 
