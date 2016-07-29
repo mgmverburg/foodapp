@@ -50,6 +50,8 @@ public class PollActivity extends AppCompatActivity {
     boolean firstRetrieval;
     ToggleButton polltab2;
     ToggleButton grouptab2;
+    ToggleButton polltab3;
+    ToggleButton grouptab3;
 
 
 
@@ -87,6 +89,18 @@ public class PollActivity extends AppCompatActivity {
                         menu.setVisibility(View.INVISIBLE);
                         TextView message = (TextView) findViewById(R.id.activePollMessage);
                         message.setText("There is currently no poll active. Wait for the admin to create one.");
+                        polltab3 = (ToggleButton) findViewById(R.id.polltab2);
+                        grouptab3 =(ToggleButton) findViewById(R.id.grouptab2);
+
+                        polltab3.setChecked(true);
+                        polltab3.setEnabled(false);
+                        grouptab3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(PollActivity.this, GroupPage.class));
+                                polltab3.setChecked(false);
+                            }
+                        });
                     }
                 }
 
@@ -159,6 +173,18 @@ public class PollActivity extends AppCompatActivity {
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
         timer = (TextView) findViewById(R.id.countdown);
+        polltab3 = (ToggleButton) findViewById(R.id.toggleButton2);
+        grouptab3 =(ToggleButton) findViewById(R.id.toggleButton);
+
+        polltab3.setChecked(true);
+        polltab3.setEnabled(false);
+        grouptab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PollActivity.this, GroupPage.class));
+                polltab3.setChecked(false);
+            }
+        });
 
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
