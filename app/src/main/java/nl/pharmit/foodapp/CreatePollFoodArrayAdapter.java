@@ -13,14 +13,12 @@ import java.util.List;
 public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
     private final Context context;
     private final List<FoodItem> values;
-    private final String pollID;
     private final CustomListener<String> listener;
 
-    public CreatePollFoodArrayAdapter(Context context, CustomListener<String> listener, List<FoodItem> values, String pollID) {
+    public CreatePollFoodArrayAdapter(Context context, CustomListener<String> listener, List<FoodItem> values) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
-        this.pollID = pollID;
         this.listener = listener;
     }
 

@@ -5,14 +5,15 @@
     android:id="@+id/activity_create_poll"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.pharmit.foodapp.CreatePollActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="50dp"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
 
@@ -23,7 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Time of dinner: "
-                android:id="@+id/textViewTimeDinner"/>
+                android:textSize="@dimen/default_text_size"
+                android:id="@+id/textViewTimeDinner" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,18 +37,22 @@
                 android:id="@+id/timePickerDinner"
                 android:layout_alignParentTop="false"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="@dimen/item_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Time poll ends (deadline): "
-                android:id="@+id/textViewPollDeadline"/>
+                android:id="@+id/textViewPollDeadline"
+                android:textSize="@dimen/default_text_size" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,19 +64,26 @@
                 android:id="@+id/timePickerDeadline"
                 android:layout_alignParentTop="false"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
+            android:layout_marginTop="@dimen/item_margin">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poll food type choices:"
-                android:id="@+id/textViewPollChoices"/>
+                android:id="@+id/textViewPollChoices"
+                android:textSize="@dimen/default_text_size"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"/>
 
 
         </RelativeLayout>
@@ -121,57 +134,37 @@
                             android:text="@string/pollAddFoodButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            style="@style/DefaultButtonStyle"
                             android:layout_alignParentRight="true"
-                            android:paddingRight="20px"
                             />
 
+
                     </LinearLayout>
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/spinner"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/bottom_margin">
 
                 <Button
                     android:text="@string/startPollButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/DefaultButtonStyle"
                     android:id="@+id/startPollButton"
                     android:layout_alignParentRight="true"
-                    android:paddingRight="20px"
                     />
             </LinearLayout>
 
         </LinearLayout>
-
-        <Spinner
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/spinner" />
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_marginTop="5dp">-->
-
-            <!--<Button-->
-                <!--android:text="Add food choices"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/addFoodButton"-->
-                <!--android:layout_below="@id/listViewPollChoices"-->
-                <!--/>-->
-
-            <!--<ListView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/listViewPollChoices"-->
-                <!--/>-->
-
-        <!--</RelativeLayout>-->
 
 
 

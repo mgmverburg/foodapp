@@ -63,30 +63,29 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-
                 android:id="@+id/btnLogin"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                style="@style/DefaultButtonStyle"
                 android:text="@string/login"
-                android:textStyle="bold" />
+                />
 
             <Button
                 android:id="@+id/btnRegister"
-                style="?android:textAppearanceSmall"
+                style="@style/DefaultButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/register"
-                android:textStyle="bold" />
+                 />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button2"
-                android:layout_gravity="center_horizontal" />
+            <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="New Button"-->
+                <!--android:id="@+id/button2"-->
+                <!--android:layout_gravity="center_horizontal" />-->
 
         </LinearLayout>
     </ScrollView>

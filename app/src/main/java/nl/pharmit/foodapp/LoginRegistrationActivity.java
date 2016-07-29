@@ -108,9 +108,13 @@ public class LoginRegistrationActivity extends AppCompatActivity {
     private void setError(String username, String password) {
         if (username.isEmpty()) {
             loginFormUsername.setError("Username is required!");
+        } else {
+            loginFormUsername.setError(null);
         }
         if (password.length() < 4) {
             loginFormPassword.setError("Password of at least 4 characters is required!");
+        } else {
+            loginFormPassword.setError(null);
         }
     }
 

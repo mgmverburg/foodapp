@@ -5,7 +5,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
   //the group ID of the user creating the poll must be passed as parameter
   $GID = $_POST["GID"];
-  $dinnerHour = $_POST["dinnerHour"]
+  $dinnerHour = $_POST["dinnerHour"];
   $dinnerMinute = $_POST["dinnerMinute"];
   $deadlineHour = $_POST["deadlineHour"];
   $deadlineMinute = $_POST["deadlineMinute"];

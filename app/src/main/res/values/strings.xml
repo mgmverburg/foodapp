@@ -22,7 +22,7 @@
     </string>
     <string name="cancel">"Cancel"</string>
     <string name="adduser">"Add"</string>
-    <string name="pollAddFoodButton">"Add food choices"</string>
+    <string name="pollAddFoodButton">"Add food choice"</string>
     <string name="startPollButton">"Start poll"</string>
     <string name="emptyTime">"--:--"</string>
 

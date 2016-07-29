@@ -86,7 +86,11 @@ public class PollActivity extends AppCompatActivity {
                         menu.setEnabled(false);
                         menu.setVisibility(View.INVISIBLE);
                         TextView message = (TextView) findViewById(R.id.activePollMessage);
-                        message.setText("There is currently no poll active. Wait for the admin to create one.");
+                        if (groupID != null && !groupID.isEmpty() ) {
+                            message.setText("There is currently no poll active. Wait for the admin to create one.");
+                        } else {
+                            message.setText("You are not yet part of a group, so you will not see any polls.");
+                        }
                     }
                 }
 

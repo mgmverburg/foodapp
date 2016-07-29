@@ -4,7 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,17 +35,17 @@ import java.util.List;
 import java.util.Map;
 
 public class CreatePollActivity extends AppCompatActivity implements CustomListener<String> {
-    TextView dinnerTime, deadlineTime;
+    TextView dinnerTime, deadlineTime, textDeadline, textDinner, textPollChoices;
     ListView listFoodChoices;
     Button addFood, startPoll;
-    List<FoodItem> foodTypes = new ArrayList<FoodItem>();
+    List<FoodItem> allFoodTypes = new ArrayList<FoodItem>();
     RequestQueue requestQueue;
     Spinner spinner;
-    ArrayAdapter<FoodItem> dataAdapter;
+    CustomSpinnerAdapter dataAdapter;
     SharedPreferences sharedPreferences;
     String pollID, groupID;
     CreatePollFoodArrayAdapter pollOptionsAdapter;
-    private List<FoodItem> data;
+    private List<FoodItem> foodChoices;
     int requestCount, spinnerCount = 0 , spinnerInitializedCount = 0;//this counts how many Gallery's are on the UI
     String deadlineTimeHour, deadlineTimeMinute, dinnerTimeHour, dinnerTimeMinute;
 
@@ -68,25 +68,29 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         spinner = (Spinner) findViewById(R.id.spinner);
         addFood = (Button) findViewById(R.id.addFoodButton);
         startPoll = (Button) findViewById(R.id.startPollButton);
+        textPollChoices = (TextView) findViewById(R.id.textViewPollChoices);
+        textDinner = (TextView) findViewById(R.id.textViewTimeDinner);
+        textDeadline = (TextView) findViewById(R.id.textViewPollDeadline);
+
         spinnerCount=1;
 
-        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
-        {
-            @Override
-            public void getResult(String result)
-            {
-                if (!result.isEmpty())
-                {
-                    CreatePollActivity.this.pollID = result;
+//        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
+//        {
+//            @Override
+//            public void getResult(String result)
+//            {
+//                if (!result.isEmpty())
+//                {
+//                    CreatePollActivity.this.pollID = result;
                     enableButtons();
                     //needs to be replaced with possible loading from saved polls options
 //                    retrievePollFoodOptions();
-                }
-            }
-        });
+//                }
+//            }
+//        });
 
-        data = new ArrayList<FoodItem>();
-        pollOptionsAdapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, data, CreatePollActivity.this.pollID);
+        foodChoices = new ArrayList<FoodItem>();
+        pollOptionsAdapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, foodChoices);
         listFoodChoices.setAdapter(pollOptionsAdapter);
         RequestManager.getInstance(this).retrieveAllFoodTypes(new CustomListener<List<FoodItem>>()
         {
@@ -95,7 +99,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
             {
                 if (!result.isEmpty())
                 {
-                    foodTypes.addAll(result);
+                    allFoodTypes.addAll(result);
                     lastInitialization();
                     //needs to be replaced with possible loading from saved polls options
 //                    retrievePollFoodOptions();
@@ -157,49 +161,6 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     }
 
-//    private void postPollFood(String pollID) {
-//
-//        for (int i = 0; i < dataAdapter.)
-/*
-    StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
-            + getResources().getString(R.string.addFoodChoice),
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    JSONObject jObj = null;
-                    Boolean isError = false;
-                    try {
-                        jObj = new JSONObject(response);
-                        isError = jObj.getBoolean("isError");
-                        if (!isError) {
-                            Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
-                            retrievePollFoodOptions();
-//                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
-//                                foodChoices.add(new FoodItem(paramFID, foodName));
-                        } else {
-                            Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(CreatePollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                }
-            }) {
-        @Override
-        protected Map<String, String> getParams() {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put(getResources().getString(R.string.FOODID), paramFID);
-            params.put(getResources().getString(R.string.POLLID), paramPID);
-            return params;
-        }
-    };
-    requestQueue.add(stringRequest);*/
-//    }
 
     private void retrievePollFoodOptions() {
         RequestManager.getInstance(CreatePollActivity.this).getAllPollFood(CreatePollActivity.this.pollID,
@@ -241,7 +202,6 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         deadlineTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -250,9 +210,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
+
+                        deadlineTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
                         CreatePollActivity.this.deadlineTimeHour = Integer.toString(selectedHour);
                         CreatePollActivity.this.deadlineTimeMinute = Integer.toString(selectedMinute);
-                        deadlineTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select the time when the poll closes");
@@ -271,59 +232,14 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         return str;
     }
 
-    private void retrieveAllFoodTypes() {
-        //making HTTP request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
-                + getResources().getString(R.string.getAllFood) ,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jObj = null;
-                        Boolean isError = false;
-                        try {
-                            jObj = new JSONObject(response);
-                            isError = jObj.getBoolean("isError");
-                            if (!isError) {
-                                JSONArray foodOptions = jObj.getJSONArray(getResources().getString(R.string.FOODITEMS));
-
-                                if (foodOptions != null) {
-                                    for (int i=0;i < foodOptions.length();i++){
-                                        JSONObject foodOption = foodOptions.getJSONObject(i);
-                                        String foodName = foodOption.getString(getResources().getString(R.string.FOODNAME));
-                                        String foodID = foodOption.getString(getResources().getString(R.string.FOODID));
-                                        foodTypes.add(new FoodItem(foodID, foodName));
-                                    }
-                                }
-
-                                lastInitialization();
-
-
-                            } else {
-                                Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CreatePollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-        requestQueue.add(stringRequest);
-    }
-
-
     private void updateFoodTypes(JSONArray types) throws JSONException {
-        data = new ArrayList<FoodItem>();
+        foodChoices = new ArrayList<FoodItem>();
         final int totalNumberRequests = types.length();
         requestCount = 0;
         for (int i = 0; i < types.length(); i++) {
             final JSONObject type = types.getJSONObject(i);
 //            final boolean lastItem = (i == types.length() - 1);
-            Log.d("Test", "food type: " + type.getString(getResources().getString(R.string.FOODID)));
+//            Log.d("Test", "food type: " + type.getString(getResources().getString(R.string.FOODID)));
 
             final String foodID = type.getString(getResources().getString(R.string.FOODID));
             RequestManager.getInstance(this).getFood(foodID, new CustomListener<JSONObject>()
@@ -334,10 +250,9 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                         requestCount++;
                         String foodName = result.getString(getResources().getString(R.string.FOODNAME));
                         Log.d("Test", foodName);
-                        data.add(new FoodItem(foodID, foodName));
+                        foodChoices.add(new FoodItem(foodID, foodName));
                         if (requestCount == totalNumberRequests) {
-                            Log.d("Test", "last item processed");
-                            CreatePollFoodArrayAdapter adapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, data, CreatePollActivity.this.pollID);
+                            CreatePollFoodArrayAdapter adapter = new CreatePollFoodArrayAdapter(CreatePollActivity.this,CreatePollActivity.this, foodChoices);
 //                            ArrayAdapter<FoodItem> adapter = new ArrayAdapter<FoodItem>(CreatePollActivity.this, android.R.layout.simple_spinner_item, data);
                             listFoodChoices.setAdapter(adapter);
                         }
@@ -348,8 +263,9 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
     }
 
     private void lastInitialization() {
-        dataAdapter = new ArrayAdapter<FoodItem>(CreatePollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodTypes);
+        dataAdapter = new CustomSpinnerAdapter(CreatePollActivity.this, android.R.layout.simple_spinner_dropdown_item, allFoodTypes);
 // Apply the adapter to the spinner
+        dataAdapter.insert(new FoodItem("", ""),0);
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -360,10 +276,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                 }
                 else {
                     FoodItem selectedChoice = (FoodItem) adapterView.getItemAtPosition(pos);
-                    if (data.contains(selectedChoice)) {
+                    if (foodChoices.contains(selectedChoice)) {
                         Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
                     } else {
-                        data.add(selectedChoice);
+                        foodChoices.add(selectedChoice);
                         pollOptionsAdapter.notifyDataSetChanged();
                     }
                 }
@@ -371,7 +287,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
+//                Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -386,12 +302,22 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
             @Override
             public void onClick(View view) {
                 if (deadlineTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime)) ||
-                        dinnerTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
+                        dinnerTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime)) ||
+                        pollOptionsAdapter.getCount() < 2) {
                     if (deadlineTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
                         deadlineTime.setError("Deadline time is required!");
+                    } else {
+                        deadlineTime.setError(null);
                     }
                     if (dinnerTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
                         dinnerTime.setError("Dinner time is required!");
+                    } else {
+                        dinnerTime.setError(null);
+                    }
+                    if (pollOptionsAdapter.getCount() < 2) {
+                        textPollChoices.setError("At least 2 food type options must be added!");
+                    } else {
+                        textPollChoices.setError(null);
                     }
 //                    Toast.makeText(CreatePollActivity.this, CreatePollActivity.this.getResources().getString(R.string.error_field_deadline_required), Toast.LENGTH_LONG).show();
                 } else {
@@ -405,7 +331,6 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     @Override
     public void getResult(String string) {
-        Log.d("Test", "test");
         retrievePollFoodOptions();
     }
 

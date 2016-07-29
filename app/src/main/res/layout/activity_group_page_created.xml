@@ -5,7 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,24 +68,22 @@
             android:layout_alignLeft="@+id/buttondisband"
             android:layout_alignStart="@+id/buttondisband"
             android:layout_marginBottom="15dp" />
+    </RelativeLayout>
 
-    <ImageView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/background" />
+        android:background="@drawable/background" >
+
 
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/grouptab"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp"
+        android:layout_weight="0.5"
         android:textOn="Group"
         android:textOff="Group"
         android:background="@drawable/tab_style"
@@ -92,10 +96,9 @@
         android:textOff="Poll"
         android:textColor="#ffffff"
         android:id="@+id/polltab"
-        android:layout_alignBottom="@+id/grouptab"
-        android:layout_alignRight="@+id/buttonadd"
-        android:layout_alignEnd="@+id/buttonadd"
+        android:layout_weight="0.5"
         android:background="@drawable/tab_style"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

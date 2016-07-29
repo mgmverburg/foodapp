@@ -88,37 +88,33 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="82dp" />
 
-    <ImageView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/background" />
+        android:background="@drawable/background" >
 
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/grouptab2"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp"
-        android:textOn="Group"
-        android:textOff="Group"
-        android:background="@drawable/tab_style"
-        android:textColor="#ffffff" />
 
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="Poll"
-        android:textOff="Poll"
-        android:textColor="#ffffff"
-        android:id="@+id/polltab2"
-        android:background="@drawable/tab_style"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignRight="@+id/floatingActionMenu"
-        android:layout_alignEnd="@+id/floatingActionMenu" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/grouptab2"
+            android:layout_weight="0.5"
+            android:textOn="Group"
+            android:textOff="Group"
+            android:background="@drawable/tab_style"
+            android:textColor="#ffffff" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Poll"
+            android:textOff="Poll"
+            android:textColor="#ffffff"
+            android:id="@+id/polltab2"
+            android:layout_weight="0.5"
+            android:background="@drawable/tab_style"/>
+    </LinearLayout>
 </RelativeLayout>

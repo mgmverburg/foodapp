@@ -1,12 +1,16 @@
 package nl.pharmit.foodapp;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -40,6 +44,22 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
 
     public interface AddUserDialogListener {
         public void onDone(boolean restartActivity);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        Point size = new Point();
+        Display display = window.getWindowManager().getDefaultDisplay();
+        display.getSize(size);
+        int width = size.x;
+
+        TypedValue typedValue = new TypedValue();
+        getResources().getValue(R.dimen.popup_width_ratio, typedValue, true);
+        float myFloatValue = typedValue.getFloat();
+//        int height = getResources().getDimensionPixelSize(R.dimen.popup_height);
+        window.setLayout((int) (width*(myFloatValue)), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     public static AddUserDialogFragment newInstance(String groupID) {
