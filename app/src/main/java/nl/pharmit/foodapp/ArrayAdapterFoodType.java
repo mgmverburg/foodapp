@@ -30,11 +30,13 @@ public class ArrayAdapterFoodType extends ArrayAdapter<FoodItem> {
 
     private final Context context;
     private final List<FoodItem> values;
+    CustomListener<String> listener;
 
-    public ArrayAdapterFoodType(Context context, List<FoodItem> values) {
+    public ArrayAdapterFoodType(Context context, List<FoodItem> values, CustomListener<String> listener) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
+        this.listener = listener;
     }
 
 
@@ -52,19 +54,19 @@ public class ArrayAdapterFoodType extends ArrayAdapter<FoodItem> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removePollFoodOption(rowFoodID, context);
+                removeFood(rowFoodID, context);
             }
         });
         return rowView;
     }
 
-    static public void removePollFoodOption(String foodID, Context contextParam) {
+    private void removeFood(String foodID, Context contextParam) {
         final String paramFoodID = foodID;
         final Context context = contextParam;
 //        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
-                + context.getResources().getString(R.string.removeFoodChoice) ,
+                + context.getResources().getString(R.string.removeFood) ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -75,7 +77,7 @@ public class ArrayAdapterFoodType extends ArrayAdapter<FoodItem> {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                ((CustomListener<String>)context).getResult("");
+                                ArrayAdapterFoodType.this.listener.getResult("");
                                 //reload page with data
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();

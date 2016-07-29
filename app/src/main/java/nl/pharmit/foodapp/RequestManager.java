@@ -14,7 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -173,6 +175,47 @@ public class RequestManager {
             }
         };
 
+        requestQueue.add(stringRequest);
+    }
+
+    public void retrieveAllFoodTypes(final CustomListener<List<FoodItem>> listener) {
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
+                + context.getResources().getString(R.string.getAllFood) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                JSONArray foodOptions = jObj.getJSONArray(context.getResources().getString(R.string.FOODITEMS));
+                                List<FoodItem> foodTypes = new ArrayList<FoodItem>();
+                                if (foodOptions != null) {
+                                    for (int i=0;i < foodOptions.length();i++){
+                                        JSONObject foodOption = foodOptions.getJSONObject(i);
+                                        String foodName = foodOption.getString(context.getResources().getString(R.string.FOODNAME));
+                                        String foodID = foodOption.getString(context.getResources().getString(R.string.FOODID));
+                                        foodTypes.add(new FoodItem(foodID, foodName));
+                                    }
+                                }
+                                listener.getResult(foodTypes);
+                            } else {
+                                Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
         requestQueue.add(stringRequest);
     }
 }

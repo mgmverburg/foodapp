@@ -108,7 +108,7 @@ public class GroupPage  extends AppCompatActivity implements AddUserDialogFragme
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GroupPage.this, PollActivity.class));
+                startActivity(new Intent(GroupPage.this, FoodTypeActivity.class));
             }
         });
         if (hasGroup) {
