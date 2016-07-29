@@ -219,4 +219,47 @@ public class RequestManager {
                 });
         requestQueue.add(stringRequest);
     }
+
+    public void addUser(String username, String paramGroupID, final CustomListener<String> listener) {
+        final String paramUsername = username;
+        final String paramGID = paramGroupID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL) + context.getResources().getString(R.string.addUser) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+
+//                                Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
+                                listener.getResult("");
+//                                dismiss();
+                            } else {
+                                Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(context.getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(context.getResources().getString(R.string.GROUPID), paramGID);
+                return params;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
 }

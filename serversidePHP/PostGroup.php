@@ -23,6 +23,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $userGroupStatementSuccess = mysqli_stmt_execute($userGroupStatement);
 
     if ($userGroupStatementSuccess) {
+      $response["GID"] = $GID;
       $response["isError"] = FALSE;
       $response["success_msg"] = "You successfully created a new group";
     } else {

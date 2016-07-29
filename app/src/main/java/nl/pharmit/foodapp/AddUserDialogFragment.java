@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -92,48 +93,14 @@ public class AddUserDialogFragment extends DialogFragment implements TextView.On
                 }
             };
 
-    public void addUser() {
-        final String paramUsername = mEditText.getText().toString();
-        final String paramGID = AddUserDialogFragment.this.groupID;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.addUser) ,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jObj = null;
-                        Boolean isError = false;
-                        try {
-                            jObj = new JSONObject(response);
-                            isError = jObj.getBoolean("isError");
-                            if (!isError) {
-
-                                Toast.makeText(context, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
-                                mListener.onDone(false);
-                                dismiss();
-                            } else {
-                                Toast.makeText(context, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
+    private void addUser() {
+        RequestManager.getInstance(context).addUser(mEditText.getText().toString(),  AddUserDialogFragment.this.groupID, new CustomListener<String>() {
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(getResources().getString(R.string.USERNAME), paramUsername);
-                params.put(getResources().getString(R.string.GROUPID), paramGID);
-                return params;
+            public void getResult(String result) throws JSONException {
+                mListener.onDone(false);
+                dismiss();
             }
-
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        requestQueue.add(stringRequest);
+        });
     }
 
     @Override

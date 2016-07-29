@@ -105,6 +105,7 @@ public class CreateGroupDialogFragment extends DialogFragment {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
+                                String groupID = jObj.getString(getResources().getString(R.string.GROUPID));
                                 Toast.makeText(context, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
                                 mListener.onDone(true);
                                 dismiss();
