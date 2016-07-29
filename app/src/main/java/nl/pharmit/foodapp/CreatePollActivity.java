@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CreatePollActivity extends AppCompatActivity implements CustomListener<String> {
-    TextView dinnerTime, deadline;
+    TextView dinnerTime, deadlineTime;
     ListView listFoodChoices;
     Button addFood, startPoll;
     List<FoodItem> foodTypes = new ArrayList<FoodItem>();
@@ -47,6 +47,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
     CreatePollFoodArrayAdapter pollOptionsAdapter;
     private List<FoodItem> data;
     int requestCount, spinnerCount = 0 , spinnerInitializedCount = 0;//this counts how many Gallery's are on the UI
+    String deadlineTimeHour, deadlineTimeMinute, dinnerTimeHour, dinnerTimeMinute;
 
 
 
@@ -62,7 +63,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         requestQueue = Volley.newRequestQueue(this);
 
         dinnerTime = (TextView) findViewById(R.id.timePickerDinner);
-        deadline = (TextView) findViewById(R.id.timePickerDeadline);
+        deadlineTime = (TextView) findViewById(R.id.timePickerDeadline);
         listFoodChoices = (ListView) findViewById(R.id.listViewPollChoices);
         spinner = (Spinner) findViewById(R.id.spinner);
         addFood = (Button) findViewById(R.id.addFoodButton);
@@ -106,7 +107,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     private void createNewPoll() {
         final String paramGID = this.groupID;
-        //@TODO: add deadline and dinner time
+        final String paramDeadlineHour = this.deadlineTimeHour;
+        final String paramDeadlineMinute = this.deadlineTimeMinute;
+        final String paramDinnerHour = this.dinnerTimeHour;
+        final String paramDinnerMinute = this.dinnerTimeMinute;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
                 + getResources().getString(R.string.createNewPoll) ,
@@ -140,6 +144,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(getResources().getString(R.string.GROUPID), paramGID);
+                params.put(getResources().getString(R.string.DEADLINETIMEHOUR), paramDeadlineHour);
+                params.put(getResources().getString(R.string.DEADLINETIMEMINUTE), paramDeadlineMinute);
+                params.put(getResources().getString(R.string.DINNERTIMEHOUR), paramDinnerHour);
+                params.put(getResources().getString(R.string.DINNERTIMEMINUTE), paramDinnerMinute);
                 return params;
             }
 
@@ -220,6 +228,8 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
+                        CreatePollActivity.this.dinnerTimeHour = Integer.toString(selectedHour);
+                        CreatePollActivity.this.dinnerTimeMinute = Integer.toString(selectedMinute);
                         dinnerTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -228,7 +238,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
             }
         });
 
-        deadline.setOnClickListener(new View.OnClickListener() {
+        deadlineTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -240,7 +250,9 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
-                        deadline.setText(pad(selectedHour) + ":" + pad(selectedMinute));
+                        CreatePollActivity.this.deadlineTimeHour = Integer.toString(selectedHour);
+                        CreatePollActivity.this.deadlineTimeMinute = Integer.toString(selectedMinute);
+                        deadlineTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select the time when the poll closes");
@@ -373,7 +385,20 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         startPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreatePollActivity.this.createNewPoll();
+                if (deadlineTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime)) ||
+                        dinnerTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
+                    if (deadlineTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
+                        deadlineTime.setError("Deadline time is required!");
+                    }
+                    if (dinnerTime.getText().equals(CreatePollActivity.this.getResources().getString(R.string.emptyTime))) {
+                        dinnerTime.setError("Dinner time is required!");
+                    }
+//                    Toast.makeText(CreatePollActivity.this, CreatePollActivity.this.getResources().getString(R.string.error_field_deadline_required), Toast.LENGTH_LONG).show();
+                } else {
+                    CreatePollActivity.this.createNewPoll();
+                }
+
+
             }
         });
     }

@@ -24,12 +24,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DummyActivity"></activity>
-        <activity android:name=".GroupPage"></activity>
-        <activity android:name=".PollPage"></activity>
-        <activity android:name=".FoodTypeActivity"></activity>
-        <activity android:name=".CreatePollActivity"></activity>
-        <activity android:name=".PollActivity"></activity>
+        <activity
+            android:name=".GroupPage"
+            android:label="@string/title_activity_group"></activity>
+        <activity
+            android:name=".PollPage"></activity>
+        <activity
+            android:name=".FoodTypeActivity"
+            android:label="@string/title_activity_food_type"></activity>
+        <activity
+            android:name=".CreatePollActivity"
+            android:label="@string/title_activity_create_poll"></activity>
+        <activity
+            android:name=".PollActivity"
+            android:label="@string/title_activity_poll"></activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

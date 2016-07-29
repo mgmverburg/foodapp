@@ -66,14 +66,15 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                 String username = loginFormUsername.getText().toString();
                 String password = loginFormPassword.getText().toString();
                 // Check for empty data in the form
-                if (!username.isEmpty() && !password.isEmpty()) {
+                if (!username.isEmpty() && password.length() >= 4) {
                     // login user
                     attemptRegister(username, password);
                 } else {
                     // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter your desired username and password", Toast.LENGTH_LONG)
-                            .show();
+                    setError(username, password);
+//                    Toast.makeText(getApplicationContext(),
+//                            "Please enter your desired username and password", Toast.LENGTH_LONG)
+//                            .show();
                 }
 
 
@@ -93,14 +94,24 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                     // login user
                     attemptLogin(username, password);
                 } else {
+                    setError(username,password);
                     // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter your username and password", Toast.LENGTH_LONG)
-                            .show();
+//                    Toast.makeText(getApplicationContext(),
+//                            "Please enter your username and password", Toast.LENGTH_LONG)
+//                            .show();
                 }
 
             }
         });
+    }
+
+    private void setError(String username, String password) {
+        if (username.isEmpty()) {
+            loginFormUsername.setError("Username is required!");
+        }
+        if (password.length() < 4) {
+            loginFormPassword.setError("Password of at least 4 characters is required!");
+        }
     }
 
     /**

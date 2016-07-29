@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Food poll</string>
-    <string name="title_activity_login_registration">Sign up/in</string>
+    <string name="app_name">"Food poll"</string>
+    <string name="title_activity_login_registration">"Sign up/in"</string>
+    <string name="title_activity_poll">"Poll"</string>
+    <string name="title_activity_create_poll">"Poll creation"</string>
+    <string name="title_activity_group">"Group"</string>
+    <string name="title_activity_food_type">"Food types"</string>
 
     <!-- Strings related to login -->
     <string name="error_unsupported">"This function is not yet supported"</string>
@@ -20,6 +24,7 @@
     <string name="adduser">"Add"</string>
     <string name="pollAddFoodButton">"Add food choices"</string>
     <string name="startPollButton">"Start poll"</string>
+    <string name="emptyTime">"--:--"</string>
 
     <string name="successMessage">"success_msg"</string>
     <string name="errorMessage">"error_msg"</string>
@@ -60,9 +65,12 @@
     <string name="FOODNAME">"name"</string>
     <string name="FOODID">"FID"</string>
     <string name="FOODDESCRIPTION">"description"</string>
-    <string name="DEADLINETIME">"deadline"</string>
-    <string name="DINNERTIME">"dinner"</string>
+    <string name="DEADLINETIMEHOUR">"deadlineHour"</string>
+    <string name="DEADLINETIMEMINUTE">"deadlineMinute"</string>
+    <string name="DINNERTIMEHOUR">"dinnerHour"</string>
+    <string name="DINNERTIMEMINUTE">"dinnerMinute"</string>
     <string name="ISADMIN">"isAdmin"</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

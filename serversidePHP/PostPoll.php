@@ -7,10 +7,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   $GID = $_POST["GID"];
   $dinnerHour = $_POST["dinnerHour"]
   $dinnerMinute = $_POST["dinnerMinute"];
-  $deadline = $_POST["deadline"];
-  $date = new DateTime('now');
-  date_time_set($date, $dinnerHour, $dinnerMinute);
-  echo $date;
+  $deadlineHour = $_POST["deadlineHour"];
+  $deadlineMinute = $_POST["deadlineMinute"];
+
+  $dinnerTime = date("Y-m-d H:i:s", strtotime($dinnerHour . $dinnerMinute));
+  $deadlineTime = date("Y-m-d H:i:s", strtotime($deadlineHour . $deadlineMinute));
   // $datetime = date ( $format [, $timestamp = $dinner ] )
 
   require_once("DBConnect.php");
@@ -19,8 +20,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   if(mysqli_num_rows($groupResult) == 1) {
     //@TODO: dinnerTime, deadlineTime still need to be added
     $PID =  mysqli_insert_id($connection);
-    $pollStatement = mysqli_prepare($connection, "INSERT INTO Poll (GID) VALUES (?)");
-    mysqli_stmt_bind_param($pollStatement, "i", $GID);
+    $pollStatement = mysqli_prepare($connection, "INSERT INTO Poll (GID, dinnerTime, deadlineTime) VALUES (?, ?, ?)");
+    mysqli_stmt_bind_param($pollStatement, "iss", $GID, $dinnerTime, $deadlineTime);
     $pollStatementSuccess = mysqli_stmt_execute($pollStatement);
 
     //it can go wrong if GID is not a valid GID, since this is enforced in the database by a foreign key
