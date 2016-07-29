@@ -55,9 +55,17 @@ public class PollActivity extends AppCompatActivity {
 
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
+//            if (spinnerInitializedCount < spinnerCount)
+//            {
+//                spinnerInitializedCount++;
+//            }
+//            else {
+
 
                 FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
-                if (!selectedChoice.equals(noselection) ) {
+            if (!selectedChoice.equals(noselection)) {
+                notjoining.setChecked(false);
+                nopreference.setChecked(false);
 //            Log.d("Test", "selected choice: " + selectedChoice.toString());
                     updateChoice(selectedChoice, this.firstChoice);
                 }
