@@ -74,26 +74,27 @@
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Group"
         android:id="@+id/grouptab"
         android:layout_alignBottom="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:textOn="@drawable/toggle_text_color"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:textOn="Group"
+        android:textOff="Group"
         android:background="@drawable/tab_style"
-        android:state_checked="true"/>
+        android:textColor="#ffffff" />
 
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Poll"
+        android:textOn="Poll"
+        android:textOff="Poll"
+        android:textColor="#ffffff"
         android:id="@+id/polltab"
         android:layout_alignBottom="@+id/grouptab"
         android:layout_alignRight="@+id/buttonadd"
         android:layout_alignEnd="@+id/buttonadd"
-        android:textOn="@drawable/toggle_text_color"
         android:background="@drawable/tab_style"/>
 
 

@@ -50,6 +50,7 @@ public class PollActivity extends AppCompatActivity {
     boolean firstRetrieval;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
