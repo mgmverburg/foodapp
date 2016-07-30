@@ -28,7 +28,7 @@
     <string name="secondChoice">"Second choice:"</string>
     <string name="firstChoice">"First choice:"</string>
     <string name="pollVoteTitle">"Choose your preference"</string>
-    <string name="deadlinePollVote">"Deadline:"</string>
+    <string name="deadlinePollVote">"Deadline"</string>
 
 
     <string name="successMessage">"success_msg"</string>
