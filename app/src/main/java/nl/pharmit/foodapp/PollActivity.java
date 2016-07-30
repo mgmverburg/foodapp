@@ -28,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +49,7 @@ public class PollActivity extends AppCompatActivity {
     FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
-    TextView timer;
+    TextView deadlineTimeTextView;
     boolean firstRetrieval;
     ToggleButton polltab2;
     ToggleButton grouptab2;
@@ -84,7 +87,11 @@ public class PollActivity extends AppCompatActivity {
                 } else {
                     if (poll != null)
                     {
-                        initializePollVoting(pollID);
+                        try {
+                            initializePollVoting(pollID);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         setContentView(R.layout.activity_poll_admin);
                         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
@@ -175,12 +182,14 @@ public class PollActivity extends AppCompatActivity {
         }
     }
 
-    private void initializePollVoting(String pollID) {
+    private void initializePollVoting(String pollID) throws ParseException {
         setContentView(R.layout.activity_poll_user);
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
-        timer = (TextView) findViewById(R.id.countdown);
-        timer.setText(this.deadlineTime);
+        deadlineTimeTextView = (TextView) findViewById(R.id.currentDeadlineTime);
+        DateFormat dateFormat = DateFormat.getDateInstance();
+        Date date = dateFormat.parse(this.deadlineTime);
+        deadlineTimeTextView.setText(this.deadlineTime);
         polltab3 = (ToggleButton) findViewById(R.id.toggleButton);
         grouptab3 =(ToggleButton) findViewById(R.id.toggleButton2);
 
