@@ -114,7 +114,8 @@
             android:text="Time left: --:--"
             android:id="@+id/countdown"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp"
+            android:textSize="20dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
