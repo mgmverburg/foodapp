@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreatePollActivity extends AppCompatActivity implements CustomListener<String> {
+public class CreatePollActivity extends AppCompatActivity implements CustomListener<FoodItem> {
     TextView dinnerTime, deadlineTime, textDeadline, textDinner, textPollChoices;
     ListView listFoodChoices;
     Button addFood, startPoll;
@@ -207,7 +207,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         }
     }
 
-    private void retrievePollFoodOptions() {
+    /*private void retrievePollFoodOptions() {
         RequestManager.getInstance(CreatePollActivity.this).getAllPollFood(CreatePollActivity.this.pollID,
                 new CustomListener<JSONArray>()
                 {
@@ -219,7 +219,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                         }
                     }
                 });
-    }
+    }*/
 
     private void enableButtons() {
         dinnerTime.setOnClickListener(new View.OnClickListener() {
@@ -277,7 +277,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         return str;
     }
 
-    private void updateFoodTypes(JSONArray types) throws JSONException {
+    /*private void updateFoodTypes(JSONArray types) throws JSONException {
         foodChoices = new ArrayList<FoodItem>();
         final int totalNumberRequests = types.length();
         requestCount = 0;
@@ -305,7 +305,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                 }
             });
         }
-    }
+    }*/
 
     private void lastInitialization() {
         dataAdapter = new CustomSpinnerAdapter(CreatePollActivity.this, android.R.layout.simple_spinner_dropdown_item, allFoodTypes);
@@ -332,7 +332,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-//                Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -375,8 +375,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
     }
 
     @Override
-    public void getResult(String string) {
-        retrievePollFoodOptions();
+    public void getResult(FoodItem removedFood) {
+        foodChoices.remove(removedFood);
+        pollOptionsAdapter.notifyDataSetChanged();
+//        retrievePollFoodOptions();
     }
 
 }

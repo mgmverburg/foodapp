@@ -177,8 +177,8 @@ public class PollActivity extends AppCompatActivity {
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
         timer = (TextView) findViewById(R.id.countdown);
-        polltab3 = (ToggleButton) findViewById(R.id.toggleButton2);
-        grouptab3 =(ToggleButton) findViewById(R.id.toggleButton);
+        polltab3 = (ToggleButton) findViewById(R.id.toggleButton);
+        grouptab3 =(ToggleButton) findViewById(R.id.toggleButton2);
 
         polltab3.setChecked(true);
         polltab3.setEnabled(false);
