@@ -73,11 +73,11 @@
 
             <Button
                 android:id="@+id/btnRegister"
-                style="@style/DefaultButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/register"
+                android:background="@drawable/all_other_buttons"
                  />
 
             <!--<Button-->
