@@ -138,14 +138,27 @@
                 android:textColor="@drawable/toggle_text_color" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time left: --:--"
-            android:id="@+id/countdown"
+            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/item_margin"
-            android:textSize="20dp"/>
+            android:layout_marginTop="@dimen/item_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deadlinePollVote"
+                android:id="@+id/deadlineText"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/emptyTime"
+                android:id="@+id/currentDeadlineTime"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 

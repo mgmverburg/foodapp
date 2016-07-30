@@ -28,6 +28,7 @@
     <string name="secondChoice">"Second choice:"</string>
     <string name="firstChoice">"First choice:"</string>
     <string name="pollVoteTitle">"Choose your preference"</string>
+    <string name="deadlinePollVote">"Deadline"</string>
 
 
     <string name="successMessage">"success_msg"</string>
@@ -74,6 +75,9 @@
     <string name="DINNERTIMEHOUR">"dinnerHour"</string>
     <string name="DINNERTIMEMINUTE">"dinnerMinute"</string>
     <string name="ISADMIN">"isAdmin"</string>
+    <string name="POLLINFO">"poll"</string>
+    <string name="DINNERTIME">"dinnerTime"</string>
+    <string name="DEADLINETIME">"deadlineTime</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
