@@ -8,14 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
     private final Context context;
     private final List<FoodItem> values;
-    private final CustomListener<String> listener;
+    private final CustomListener<FoodItem> listener;
 
-    public CreatePollFoodArrayAdapter(Context context, CustomListener<String> listener, List<FoodItem> values) {
+    public CreatePollFoodArrayAdapter(Context context, CustomListener<FoodItem> listener, List<FoodItem> values) {
         super(context, R.layout.rowlayout, values);
         this.context = context;
         this.values = values;
@@ -37,8 +39,13 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    values.remove(food);
-                    CreatePollFoodArrayAdapter.this.notifyDataSetChanged();
+                    try {
+                        CreatePollFoodArrayAdapter.this.listener.getResult(food);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    values.remove(food);
+//                    CreatePollFoodArrayAdapter.this.notifyDataSetChanged();
                 }
             });
 
