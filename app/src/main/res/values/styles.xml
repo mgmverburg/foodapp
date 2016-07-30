@@ -15,6 +15,7 @@
 
     <style name="DefaultButtonStyle">
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
         <item name="android:paddingBottom">@dimen/button_height_padding</item>
         <item name="android:paddingTop">@dimen/button_height_padding</item>
         <item name="android:background">@drawable/all_other_buttons</item>
