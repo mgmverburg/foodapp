@@ -13,29 +13,25 @@ import org.json.JSONException;
 import java.util.List;
 
 public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
-    private final Context context;
-    private final List<FoodItem> values;
     private final CustomListener<FoodItem> listener;
 
     public CreatePollFoodArrayAdapter(Context context, CustomListener<FoodItem> listener, List<FoodItem> values) {
-        super(context, R.layout.rowlayout, values);
-        this.context = context;
-        this.values = values;
+        super(context, 0, values);
         this.listener = listener;
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
-
-        textView.setText(values.get(position).getFoodName());
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.rowlayout, parent, false);
+        }
+        TextView textView = (TextView) convertView.findViewById(R.id.label);
+        final FoodItem food = getItem(position);
+        textView.setText(food.getFoodName());
         // Change the icon for Windows and iPhone
-        final FoodItem food = values.get(position);
-        ImageButton button = (ImageButton) rowView.findViewById(R.id.remove_user);
+
+        ImageButton button = (ImageButton) convertView.findViewById(R.id.remove_user);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,6 +55,6 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
 //            imageView.setImageResource(R.drawable.ok);
 //        }
 
-        return rowView;
+        return convertView;
     }
 }

@@ -54,7 +54,7 @@ public class RequestManager {
     }
 
 
-    public void getActivePoll(String groupIDparam, final CustomListener<String> listener ) {
+    public void getActivePoll(String groupIDparam, final CustomListener<JSONObject> listener ) {
         final String paramGID = groupIDparam;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, this.context.getResources().getString(R.string.rootURL)
@@ -68,11 +68,12 @@ public class RequestManager {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                String PID = jObj.getString(RequestManager.this.context.getResources().getString(R.string.POLLID));
-                                listener.getResult(PID);
+                                JSONObject poll = jObj.getJSONObject(RequestManager.this.context.getResources().getString(R.string.POLLINFO));
+//                                String PID = jObj.getString(RequestManager.this.context.getResources().getString(R.string.POLLID));
+                                listener.getResult(poll);
 //
                             } else {
-                                listener.getResult("");
+                                listener.getResult(null);
 //                                Toast.makeText(RequestManager.this.context, jObj.getString(RequestManager.this.context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {

@@ -129,7 +129,6 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                             if (!isError) {
                                 String pollID = jObj.getString(getResources().getString(R.string.POLLID));
                                 postPollFood(pollID);
-                                startActivity(new Intent(CreatePollActivity.this, PollActivity.class));
                             } else {
                                 Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
@@ -163,6 +162,8 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     private void postPollFood(String pollID) {
         final String paramPID = pollID;
+        requestCount = 0;
+        final int totalRequestCount = pollOptionsAdapter.getCount();
         for (int i = 0; i < pollOptionsAdapter.getCount(); i++) {
             FoodItem option = pollOptionsAdapter.getItem(i);
             final String paramFID = option.getFoodID();
@@ -177,10 +178,15 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                                 jObj = new JSONObject(response);
                                 isError = jObj.getBoolean("isError");
                                 if (!isError) {
+                                    requestCount++;
+                                    if (requestCount == totalRequestCount) {
+                                        startActivity(new Intent(CreatePollActivity.this, PollActivity.class));
+                                    }
 //                                    Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
 //                                    retrievePollFoodOptions();
 //                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
+
                                 } else {
                                     Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                                 }
@@ -234,8 +240,8 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
-                        CreatePollActivity.this.dinnerTimeHour = Integer.toString(selectedHour);
-                        CreatePollActivity.this.dinnerTimeMinute = Integer.toString(selectedMinute);
+                        CreatePollActivity.this.dinnerTimeHour = pad(selectedHour);
+                        CreatePollActivity.this.dinnerTimeMinute = pad(selectedMinute);
                         dinnerTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -255,10 +261,10 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
-
+                        CreatePollActivity.this.deadlineTimeHour = pad(selectedHour);
+                        CreatePollActivity.this.deadlineTimeMinute = pad(selectedMinute);
                         deadlineTime.setText(pad(selectedHour) + ":" + pad(selectedMinute));
-                        CreatePollActivity.this.deadlineTimeHour = Integer.toString(selectedHour);
-                        CreatePollActivity.this.deadlineTimeMinute = Integer.toString(selectedMinute);
+
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select the time when the poll closes");
@@ -324,8 +330,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                     if (foodChoices.contains(selectedChoice)) {
                         Toast.makeText(CreatePollActivity.this, "The food you are trying to add was already added to the poll", Toast.LENGTH_LONG).show();
                     } else {
-                        foodChoices.add(selectedChoice);
-                        pollOptionsAdapter.notifyDataSetChanged();
+                        pollOptionsAdapter.add(selectedChoice);
                     }
                 }
             }
@@ -376,8 +381,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     @Override
     public void getResult(FoodItem removedFood) {
-        foodChoices.remove(removedFood);
-        pollOptionsAdapter.notifyDataSetChanged();
+        pollOptionsAdapter.remove(removedFood);
 //        retrievePollFoodOptions();
     }
 

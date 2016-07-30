@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PollActivity extends AppCompatActivity {
-    String pollID, username, groupID;
+    String pollID, username, groupID, dinnerTime, deadlineTime;
     boolean isAdmin;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
@@ -70,16 +70,19 @@ public class PollActivity extends AppCompatActivity {
         noselection = new FoodItem("0", "Select choice");
 //        foodChoices.add(noselection);
 
-        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<String>()
+        RequestManager.getInstance(this).getActivePoll(this.groupID, new CustomListener<JSONObject>()
         {
             @Override
-            public void getResult(String pollID)
-            {
-                PollActivity.this.pollID = pollID;
+            public void getResult(JSONObject poll) throws JSONException {
+                if (poll != null) {
+                    PollActivity.this.pollID = poll.getString(PollActivity.this.getResources().getString(R.string.POLLID));
+                    PollActivity.this.dinnerTime = poll.getString(PollActivity.this.getResources().getString(R.string.DINNERTIME));
+                    PollActivity.this.deadlineTime = poll.getString(PollActivity.this.getResources().getString(R.string.DEADLINETIME));
+                }
                 if (isAdmin) {
                     initializeAdminView();
                 } else {
-                    if (!pollID.isEmpty())
+                    if (poll != null)
                     {
                         initializePollVoting(pollID);
                     } else {
@@ -155,7 +158,7 @@ public class PollActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Click action
-                if (pollID.isEmpty()) {
+                if (pollID == null) {
                     startActivity(new Intent(PollActivity.this, CreatePollActivity.class));
                 } else {
                     Toast.makeText(PollActivity.this, getResources().getString(R.string.poll_already_active),  Toast.LENGTH_LONG).show();
@@ -164,7 +167,7 @@ public class PollActivity extends AppCompatActivity {
         });
 
         TextView message = (TextView) findViewById(R.id.activePollMessage);
-        if (pollID.isEmpty()) {
+        if (pollID == null) {
 
             message.setText("There is currently no poll active");
         } else {
@@ -177,6 +180,7 @@ public class PollActivity extends AppCompatActivity {
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
         timer = (TextView) findViewById(R.id.countdown);
+        timer.setText(this.deadlineTime);
         polltab3 = (ToggleButton) findViewById(R.id.toggleButton);
         grouptab3 =(ToggleButton) findViewById(R.id.toggleButton2);
 
