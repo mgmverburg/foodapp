@@ -87,12 +87,6 @@ public class PollActivity extends AppCompatActivity {
                         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
                         menu.setEnabled(false);
                         menu.setVisibility(View.INVISIBLE);
-                        TextView message = (TextView) findViewById(R.id.activePollMessage);
-                        if (groupID != null && !groupID.isEmpty() ) {
-                            message.setText("There is currently no poll active. Wait for the admin to create one.");
-                        } else {
-                            message.setText("You are not yet part of a group, so you will not see any polls.");
-                        }
                         polltab3 = (ToggleButton) findViewById(R.id.polltab2);
                         grouptab3 =(ToggleButton) findViewById(R.id.grouptab2);
 
@@ -163,13 +157,7 @@ public class PollActivity extends AppCompatActivity {
             }
         });
 
-        TextView message = (TextView) findViewById(R.id.activePollMessage);
-        if (pollID.isEmpty()) {
 
-            message.setText("There is currently no poll active");
-        } else {
-            message.setText("There is currently a poll active");
-        }
     }
 
     private void initializePollVoting(String pollID) {
