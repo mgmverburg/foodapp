@@ -18,6 +18,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   //or if the groupname is too long
   if ($groupStatementSuccess) {
     $GID =  mysqli_insert_id($connection);
+    echo $GID;
     $userGroupStatement = mysqli_prepare($connection, "INSERT INTO User_Group (GID, username) VALUES (?, ?)");
     mysqli_stmt_bind_param($userGroupStatement, "ss", $GID, $username);
     $userGroupStatementSuccess = mysqli_stmt_execute($userGroupStatement);

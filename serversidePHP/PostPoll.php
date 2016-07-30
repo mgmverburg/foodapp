@@ -19,11 +19,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   $groupResult = GetGroup($connection);
   if(mysqli_num_rows($groupResult) == 1) {
     //@TODO: dinnerTime, deadlineTime still need to be added
-    $PID =  mysqli_insert_id($connection);
+
     $pollStatement = mysqli_prepare($connection, "INSERT INTO Poll (GID, dinnerTime, deadlineTime) VALUES (?, ?, ?)");
     mysqli_stmt_bind_param($pollStatement, "iss", $GID, $dinnerTime, $deadlineTime);
     $pollStatementSuccess = mysqli_stmt_execute($pollStatement);
-
+    $PID =  mysqli_insert_id($connection);
     //it can go wrong if GID is not a valid GID, since this is enforced in the database by a foreign key
     if ($pollStatementSuccess) {
       $response["PID"] = $PID;

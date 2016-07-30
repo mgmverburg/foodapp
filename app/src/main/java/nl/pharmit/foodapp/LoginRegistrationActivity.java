@@ -48,15 +48,6 @@ public class LoginRegistrationActivity extends AppCompatActivity {
         loginFormPassword = (EditText) findViewById(R.id.formPassword);
         Button loginButton = (Button) findViewById(R.id.btnLogin);
         Button registerButton = (Button) findViewById(R.id.btnRegister);
-        Button button2 = (Button) findViewById(R.id.button2);
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent (LoginRegistrationActivity.this, PollPage.class));
-            }
-        });
-
 
         registerButton.setOnClickListener(new View.OnClickListener(){
 

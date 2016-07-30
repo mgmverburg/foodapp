@@ -82,8 +82,8 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 //                if (!result.isEmpty())
 //                {
 //                    CreatePollActivity.this.pollID = result;
-                    enableButtons();
-                    //needs to be replaced with possible loading from saved polls options
+        enableButtons();
+        //needs to be replaced with possible loading from saved polls options
 //                    retrievePollFoodOptions();
 //                }
 //            }
@@ -128,7 +128,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 String pollID = jObj.getString(getResources().getString(R.string.POLLID));
-//                                postPollFood(pollID);
+                                postPollFood(pollID);
                                 startActivity(new Intent(CreatePollActivity.this, PollActivity.class));
                             } else {
                                 Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
@@ -161,6 +161,51 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
 
     }
 
+    private void postPollFood(String pollID) {
+        final String paramPID = pollID;
+        for (int i = 0; i < pollOptionsAdapter.getCount(); i++) {
+            FoodItem option = pollOptionsAdapter.getItem(i);
+            final String paramFID = option.getFoodID();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
+                    + getResources().getString(R.string.addFoodChoice),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject jObj = null;
+                            Boolean isError = false;
+                            try {
+                                jObj = new JSONObject(response);
+                                isError = jObj.getBoolean("isError");
+                                if (!isError) {
+//                                    Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
+//                                    retrievePollFoodOptions();
+//                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
+//                                foodChoices.add(new FoodItem(paramFID, foodName));
+                                } else {
+                                    Toast.makeText(CreatePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(CreatePollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(getResources().getString(R.string.FOODID), paramFID);
+                    params.put(getResources().getString(R.string.POLLID), paramPID);
+                    return params;
+                }
+            };
+            requestQueue.add(stringRequest);
+        }
+    }
 
     private void retrievePollFoodOptions() {
         RequestManager.getInstance(CreatePollActivity.this).getAllPollFood(CreatePollActivity.this.pollID,
