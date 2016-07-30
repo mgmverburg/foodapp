@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time of dinner: "
+                android:text="Time for dinner:"
                 android:textSize="@dimen/default_text_size"
                 android:id="@+id/textViewTimeDinner" />
 
@@ -50,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time poll ends (deadline): "
+                android:text="Poll vote deadline:"
                 android:id="@+id/textViewPollDeadline"
                 android:textSize="@dimen/default_text_size" />
 
@@ -78,7 +78,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poll food type choices:"
+                android:text="Poll food choices:"
                 android:id="@+id/textViewPollChoices"
                 android:textSize="@dimen/default_text_size"
                 android:focusable="true"
