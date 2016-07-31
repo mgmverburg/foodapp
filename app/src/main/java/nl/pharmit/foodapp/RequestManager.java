@@ -34,6 +34,7 @@ public class RequestManager {
     Context context;
     DateFormat dateFormat;
     Calendar calendar;
+    int requestCount;
 
     private RequestManager(Context context)
     {
@@ -118,7 +119,7 @@ public class RequestManager {
 
     }
 
-    public void getAllPollFood(String pollIDparam, final CustomListener<JSONArray> listener) {
+    public void getAllPollFood(String pollIDparam, final CustomListener<List<FoodItem>> listener) {
         final String paramPID = pollIDparam;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
@@ -133,8 +134,26 @@ public class RequestManager {
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 JSONArray foodOptions = jObj.getJSONArray(context.getResources().getString(R.string.FOODITEMS));
-                                listener.getResult(foodOptions);
+                                final int totalNumberRequests = foodOptions.length();
+                                requestCount = 0;
+                                final List<FoodItem> foodChoices = new ArrayList<FoodItem>();
+                                for (int i=0;i<foodOptions.length();i++) {
+                                    JSONObject foodOption = null;
+                                    foodOption = foodOptions.getJSONObject(i);
+                                    final String foodID = foodOption.getString(context.getResources().getString(R.string.FOODID));
+                                    RequestManager.this.getFood(foodID, new CustomListener<JSONObject>() {
+                                        @Override
+                                        public void getResult(JSONObject object) throws JSONException {
+                                            requestCount++;
+                                            String foodName = object.getString(context.getResources().getString(R.string.FOODNAME));
+                                            foodChoices.add(new FoodItem(foodID, foodName));
+                                            if (requestCount == totalNumberRequests) {
+                                                listener.getResult(foodChoices);
+                                            }
+                                        }
+                                    });
 
+                                }
                             } else {
                                 Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
