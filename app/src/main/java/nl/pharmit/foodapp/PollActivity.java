@@ -209,7 +209,8 @@ public class PollActivity extends AppCompatActivity {
         favoritePollsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startActivity(new Intent(PollActivity.this, FavoritePollActivity.class));
+                Toast.makeText(PollActivity.this, getResources().getString(R.string.error_unsupported), Toast.LENGTH_LONG).show();
+//               startActivity(new Intent(PollActivity.this, FavoritePollActivity.class));
             }
         });
 
