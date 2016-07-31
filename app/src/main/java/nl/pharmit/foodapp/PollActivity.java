@@ -42,7 +42,7 @@ import java.util.Map;
 
 public class PollActivity extends AppCompatActivity {
     String pollID, username, groupID, dinnerTime, deadlineTime;
-    boolean isAdmin;
+    boolean isAdmin, isPollClosed;
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
     List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
@@ -60,6 +60,8 @@ public class PollActivity extends AppCompatActivity {
     ToggleButton polltab3;
     ToggleButton grouptab3;
     String deadlineTimeHour, deadlineTimeMinute;
+    DateFormat dateFormat;
+    Calendar calendar;
 
 
 
@@ -67,6 +69,9 @@ public class PollActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        calendar = Calendar.getInstance();
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -86,6 +91,12 @@ public class PollActivity extends AppCompatActivity {
                     PollActivity.this.pollID = poll.getString(PollActivity.this.getResources().getString(R.string.POLLID));
                     PollActivity.this.dinnerTime = poll.getString(PollActivity.this.getResources().getString(R.string.DINNERTIME));
                     PollActivity.this.deadlineTime = poll.getString(PollActivity.this.getResources().getString(R.string.DEADLINETIME));
+                    int closedInt = poll.getInt(getResources().getString(R.string.POLLCLOSED));
+                    if (closedInt == 1) {
+                        PollActivity.this.isPollClosed = true;
+                    } else {
+                        PollActivity.this.isPollClosed = false;
+                    }
 
                     if (isAdmin) {
                         initializeAdminView();
@@ -357,8 +368,6 @@ public class PollActivity extends AppCompatActivity {
     }
 
     private String getTimeFormat(String date) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateFormat.parse(date));
         String time = CreatePollActivity.pad(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + CreatePollActivity.pad(calendar.get(Calendar.MINUTE));
         return time;
@@ -413,7 +422,6 @@ public class PollActivity extends AppCompatActivity {
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 int joiningInt = jObj.getInt(getResources().getString(R.string.JOINING));
-                                Log.d("Test", Integer.toString(joiningInt));
                                 boolean joining;
                                 if (joiningInt == 1) {
                                     joining = true;

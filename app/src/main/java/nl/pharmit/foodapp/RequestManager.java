@@ -14,7 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +32,15 @@ public class RequestManager {
     private static RequestManager instance = null;
     public RequestQueue requestQueue;
     Context context;
+    DateFormat dateFormat;
+    Calendar calendar;
 
     private RequestManager(Context context)
     {
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         this.context = context;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        calendar = Calendar.getInstance();
     }
 
     public static synchronized RequestManager getInstance(Context context)
@@ -69,6 +77,18 @@ public class RequestManager {
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 JSONObject poll = jObj.getJSONObject(RequestManager.this.context.getResources().getString(R.string.POLLINFO));
+                                String deadlineTime = poll.getString(context.getResources().getString(R.string.DEADLINETIME));
+                                try {
+                                    calendar.setTime(dateFormat.parse(deadlineTime));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                int deadlineHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int deadlineMinute = calendar.get(Calendar.MINUTE);
+
+                                int currentHour = calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                                int currentMinute = calendar.getInstance().get(Calendar.MINUTE);
+
 //                                String PID = jObj.getString(RequestManager.this.context.getResources().getString(R.string.POLLID));
                                 listener.getResult(poll);
 //
