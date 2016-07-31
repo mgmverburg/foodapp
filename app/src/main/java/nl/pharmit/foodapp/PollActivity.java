@@ -46,6 +46,7 @@ public class PollActivity extends AppCompatActivity {
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
     List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
+    List<FoodItemPollResult> pollResultList = new ArrayList<FoodItemPollResult>();
     SharedPreferences sharedPreferences;
     CustomSpinnerAdapter firstChoiceDataAdapter, secondChoiceDataAdapter;
     RequestQueue requestQueue;
@@ -408,6 +409,102 @@ public class PollActivity extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
         }
+    }
+
+    private void retrieveChoiceAmount(String foodID, final boolean firstChoice) {
+        final String paramFID = foodID;
+        final String paramPID = this.pollID;
+        int fileName;
+        if (firstChoice) {
+            fileName = R.string.getFoodFirstChoicesAmount;
+        } else {
+            fileName = R.string.getFoodSecondChoicesAmount;
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(fileName) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                int amount = jObj.getInt(getResources().getString(R.string.VOTEAMOUNT));
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.FOODID), paramFID);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+
+    private void retrieveCurrentPollResults() {
+        final String paramUsername = this.username;
+        final String paramPID = this.pollID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getPollJoining) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                int joiningInt = jObj.getInt(getResources().getString(R.string.JOINING));
+                                boolean joining;
+                                if (joiningInt == 1) {
+                                    joining = true;
+                                } else {
+                                    joining = false;
+                                }
+                                setJoining(joining);
+                            }
+                            retrieveChoice(true);
+                            retrieveChoice(false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void retrieveJoining() {

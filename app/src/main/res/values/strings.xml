@@ -52,6 +52,8 @@
     <string name="getFoodOptions">"GetAllPollFood.php"</string>
     <string name="getActivePoll">"GetCurrentPoll.php"</string>
     <string name="getFood">"GetFood.php"</string>
+    <string name="getFoodFirstChoicesAmount">"GetAllPollFoodFirstChoice.php"</string>
+    <string name="getFoodSecondChoicesAmount">"GetAllPollFoodSecondChoice.php"</string>
     <string name="updateFirstChoice">"UpdatePollFirstChoice.php"</string>
     <string name="updateSecondChoice">"UpdatePollSecondChoice.php"</string>
     <string name="updatePollDeadline">"UpdatePollDeadline.php"</string>
@@ -88,6 +90,7 @@
     <string name="DEADLINETIME">"deadlineTime"</string>
     <string name="JOINING">"joining"</string>
     <string name="POLLCLOSED">"closed"</string>
+    <string name="VOTEAMOUNT">"amount"</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
