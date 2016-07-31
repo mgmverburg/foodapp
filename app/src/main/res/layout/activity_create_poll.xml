@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time for dinner:"
+                android:text="@string/timeDinnerEdit"
                 android:textSize="@dimen/default_text_size"
                 android:id="@+id/textViewTimeDinner" />
 
@@ -40,7 +40,8 @@
                 android:layout_alignParentRight="true"
                 android:focusable="true"
                 android:clickable="true"
-                android:focusableInTouchMode="true"/>
+                android:focusableInTouchMode="true"
+                />
         </RelativeLayout>
 
         <RelativeLayout
@@ -50,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poll vote deadline:"
+                android:text="@string/timeDeadlineEditString"
                 android:id="@+id/textViewPollDeadline"
                 android:textSize="@dimen/default_text_size" />
 

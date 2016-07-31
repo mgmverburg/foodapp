@@ -1,5 +1,6 @@
 package nl.pharmit.foodapp;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -30,7 +32,9 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +53,13 @@ public class PollActivity extends AppCompatActivity {
     FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
-    TextView deadlineTimeTextView;
+    TextView deadlineTimeTextView, dinnerTimeTextView, editDeadlineTimeTextView;
     boolean firstRetrieval;
     ToggleButton polltab2;
     ToggleButton grouptab2;
     ToggleButton polltab3;
     ToggleButton grouptab3;
+    String deadlineTimeHour, deadlineTimeMinute;
 
 
 
@@ -81,45 +86,45 @@ public class PollActivity extends AppCompatActivity {
                     PollActivity.this.pollID = poll.getString(PollActivity.this.getResources().getString(R.string.POLLID));
                     PollActivity.this.dinnerTime = poll.getString(PollActivity.this.getResources().getString(R.string.DINNERTIME));
                     PollActivity.this.deadlineTime = poll.getString(PollActivity.this.getResources().getString(R.string.DEADLINETIME));
-                }
-                if (isAdmin) {
-                    initializeAdminView();
-                } else {
-                    if (poll != null)
-                    {
+
+                    if (isAdmin) {
+                        initializeAdminView();
+                    } else {
                         try {
                             initializePollVoting(pollID);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        setContentView(R.layout.activity_poll_admin);
+                    }
+                } else {
+                    setContentView(R.layout.activity_no_active_poll);
+                    TextView message = (TextView) findViewById(R.id.activePollMessage);
+                    if (!isAdmin) {
                         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
                         menu.setEnabled(false);
                         menu.setVisibility(View.INVISIBLE);
-                        TextView message = (TextView) findViewById(R.id.activePollMessage);
-                        if (groupID != null && !groupID.isEmpty() ) {
+
+                        if (groupID != null && !groupID.isEmpty()) {
                             message.setText("There is currently no poll active. Wait for the admin to create one.");
                         } else {
                             message.setText("You are not yet part of a group, so you will not see any polls.");
                         }
-                        polltab3 = (ToggleButton) findViewById(R.id.polltab2);
-                        grouptab3 =(ToggleButton) findViewById(R.id.grouptab2);
-
-                        polltab3.setChecked(true);
-                        polltab3.setEnabled(false);
-                        grouptab3.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(PollActivity.this, GroupPage.class));
-                                polltab3.setChecked(false);
-                            }
-                        });
+                    } else {
+                        message.setText("There is currently no poll active");
                     }
+                    polltab3 = (ToggleButton) findViewById(R.id.polltab2);
+                    grouptab3 = (ToggleButton) findViewById(R.id.grouptab2);
+
+                    polltab3.setChecked(true);
+                    polltab3.setEnabled(false);
+                    grouptab3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(PollActivity.this, GroupPage.class));
+                            polltab3.setChecked(false);
+                        }
+                    });
                 }
-
-
-
             }
         });
 
@@ -141,6 +146,36 @@ public class PollActivity extends AppCompatActivity {
             }
         });
         //@TODO: show poll vote amounts
+
+        editDeadlineTimeTextView = (TextView) findViewById(R.id.timeDeadlineEdit);
+        try {
+            editDeadlineTimeTextView.setText(getTimeFormat(this.deadlineTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        editDeadlineTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(PollActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
+                        PollActivity.this.deadlineTimeHour = CreatePollActivity.pad(selectedHour);
+                        PollActivity.this.deadlineTimeMinute = CreatePollActivity.pad(selectedMinute);
+                        updatePollDeadline();
+
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Change the time when the poll closes");
+                mTimePicker.show();
+            }
+        });
+
 
         FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);
         foodTypeButton.setOnClickListener(new View.OnClickListener() {
@@ -172,14 +207,51 @@ public class PollActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        TextView message = (TextView) findViewById(R.id.activePollMessage);
-        if (pollID == null) {
+    private void updatePollDeadline() {
+        final String paramPID = this.pollID;
+        final String paramDeadlineHour = this.deadlineTimeHour;
+        final String paramDeadlineMinute = this.deadlineTimeMinute;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.updatePollDeadline) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
 
-            message.setText("There is currently no poll active");
-        } else {
-            message.setText("There is currently a poll active");
-        }
+                            if (!isError) {
+                                editDeadlineTimeTextView.setText(PollActivity.this.deadlineTimeHour + ":" + PollActivity.this.deadlineTimeMinute);
+
+                            } else {
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.DEADLINETIMEHOUR), paramDeadlineHour);
+                params.put(getResources().getString(R.string.DEADLINETIMEMINUTE), paramDeadlineMinute);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void initializePollVoting(String pollID) throws ParseException {
@@ -187,9 +259,8 @@ public class PollActivity extends AppCompatActivity {
         nopreference = (ToggleButton) findViewById(R.id.nopreference);
         notjoining = (ToggleButton) findViewById(R.id.notjoining);
         deadlineTimeTextView = (TextView) findViewById(R.id.currentDeadlineTime);
-        DateFormat dateFormat = DateFormat.getDateInstance();
-        Date date = dateFormat.parse(this.deadlineTime);
-        deadlineTimeTextView.setText(this.deadlineTime);
+        dinnerTimeTextView = (TextView) findViewById(R.id.dinnerTime);
+
         polltab3 = (ToggleButton) findViewById(R.id.toggleButton);
         grouptab3 =(ToggleButton) findViewById(R.id.toggleButton2);
 
@@ -203,11 +274,17 @@ public class PollActivity extends AppCompatActivity {
             }
         });
 
+        deadlineTimeTextView.setText(getTimeFormat(this.deadlineTime));
+        dinnerTimeTextView.setText(getTimeFormat(this.dinnerTime));
+
+
         nopreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    notjoining.setChecked(false);
-                    nopreference.setEnabled(false);
+                    if (!firstRetrieval) { //this is the case when we first retrieve the value,
+                        //because then we don't want it to update it, since the value came from the server
+                        updateJoining(true);
+                    }
                 }
                 else {
                     nopreference.setEnabled(true);
@@ -218,8 +295,10 @@ public class PollActivity extends AppCompatActivity {
         notjoining.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    nopreference.setChecked(false);
-                    notjoining.setEnabled(false);
+                    if (!firstRetrieval) {//this is the case when we first retrieve the value,
+                        //because then we don't want it to update it, since the value came from the server
+                        updateJoining(false);
+                    }
                 }
                 else {
                     notjoining.setEnabled(true);
@@ -258,15 +337,15 @@ public class PollActivity extends AppCompatActivity {
                                             (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesFirst);
                                     secondChoiceDataAdapter = new CustomSpinnerAdapter
                                             (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesSecond);
-                                    firstChoiceSpinner.setAdapter(firstChoiceDataAdapter);
-                                    secondChoiceSpinner.setAdapter(secondChoiceDataAdapter);
                                     firstChoiceDataAdapter.insert(noselection,0);
                                     secondChoiceDataAdapter.insert(noselection,0);
+                                    firstChoiceSpinner.setAdapter(firstChoiceDataAdapter);
+                                    secondChoiceSpinner.setAdapter(secondChoiceDataAdapter);
+
                                     firstRetrieval = true; //sets boolean to true so that we can set the listeners the first time we
                                     //retrieve the choices
                                     requestCount = 0;
-                                    retrieveChoice(true);
-                                    retrieveChoice(false);
+                                    retrieveJoining();
                                 }
                             }
                         });
@@ -275,6 +354,14 @@ public class PollActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String getTimeFormat(String date) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateFormat.parse(date));
+        String time = CreatePollActivity.pad(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + CreatePollActivity.pad(calendar.get(Calendar.MINUTE));
+        return time;
     }
 
     class onItemSelectedListener implements AdapterView.OnItemSelectedListener {
@@ -289,19 +376,18 @@ public class PollActivity extends AppCompatActivity {
 
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            if (spinnerInitializedCount < spinnerCount)
-            {
-                spinnerInitializedCount++;
-            }
-            else {
-
-            FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
-//            if (!selectedChoice.equals(noselection)) {
-                notjoining.setChecked(false);
-                nopreference.setChecked(false);
+//            if (spinnerInitializedCount < spinnerCount)
+//            {
+//                spinnerInitializedCount++;
+//            }
+//            else {
+                FoodItem selectedChoice = (FoodItem) parent.getItemAtPosition(pos);
+                if (!selectedChoice.equals(noselection)) {
+                    removeJoining();
 //            Log.d("Test", "selected choice: " + selectedChoice.toString());
-                updateChoice(selectedChoice, this.firstChoice);
-            }
+                    updateChoice(selectedChoice, this.firstChoice);
+                }
+//            }
 
 
             // An item was selected. You can retrieve the selected item using
@@ -313,6 +399,70 @@ public class PollActivity extends AppCompatActivity {
         }
     }
 
+    private void retrieveJoining() {
+        final String paramUsername = this.username;
+        final String paramPID = this.pollID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getPollJoining) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                int joiningInt = jObj.getInt(getResources().getString(R.string.JOINING));
+                                Log.d("Test", Integer.toString(joiningInt));
+                                boolean joining;
+                                if (joiningInt == 1) {
+                                    joining = true;
+                                } else {
+                                    joining = false;
+                                }
+                                setJoining(joining);
+                            }
+                            retrieveChoice(true);
+                            retrieveChoice(false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void setJoining(boolean joining) {
+        if (joining) {
+            notjoining.setChecked(false);
+            resetSpinnerSelection(true);
+            resetSpinnerSelection(false);
+            nopreference.setEnabled(false);
+            nopreference.setChecked(true);
+        } else {
+            resetSpinnerSelection(true);
+            resetSpinnerSelection(false);
+            nopreference.setChecked(false);
+            notjoining.setEnabled(false);
+            notjoining.setChecked(true);
+        }
+    }
 
     private void retrieveChoice(final boolean firstChoice) {
         final String paramUsername = this.username;
@@ -340,7 +490,7 @@ public class PollActivity extends AppCompatActivity {
 //                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
                                 String foodID = jObj.getString(getResources().getString(R.string.FOODID));
 //                                Log.d("Test", "fisrt choice: ");
-                                FoodItem choice =  new FoodItem(foodID, "");
+                                FoodItem choice = new FoodItem(foodID, "");
 
                                 if (firstChoice) {
 
@@ -356,10 +506,11 @@ public class PollActivity extends AppCompatActivity {
                                 }
 //
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
-                            } else {
-                                resetSpinnerSelection(firstChoice);
-//                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
+//                            } else {
+//                                resetSpinnerSelection(firstChoice);
+////                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+//                            }
                             if (requestCount == 2) {
                                 firstChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(true));
                                 secondChoiceSpinner.setOnItemSelectedListener(new onItemSelectedListener(false));
@@ -402,6 +553,7 @@ public class PollActivity extends AppCompatActivity {
             int spinnerPosition = secondChoiceDataAdapter.getPosition(noselection);
             secondChoiceSpinner.setSelection(spinnerPosition);
         }
+        removeChoice(firstChoice);
     }
 
     private void removeChoice(final boolean firstChoice) {
@@ -454,6 +606,94 @@ public class PollActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void removeJoining() {
+        final String paramUsername = this.username;
+        final String paramPID = this.pollID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.removePollJoining) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                notjoining.setChecked(false);
+                                nopreference.setChecked(false);
+                            } else {
+//                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    //joining=true implies "no preference" was selected, of course the user is also joining if
+    //it has selected a choise
+    private void updateJoining(final Boolean joining) {
+        final String paramJoining =  Integer.toString(joining ? 1 : 0);
+        final String paramUsername = this.username;
+        final String paramPID = this.pollID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.updatePollJoining),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                setJoining(joining);
+//                                retrieveChoice(firstChoice);
+                            } else {
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.USERNAME), paramUsername);
+                params.put(getResources().getString(R.string.JOINING), paramJoining);
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
     private void updateChoice(FoodItem choice, final boolean firstChoice) {
         final String paramFID = choice.getFoodID();
         final String paramUsername = this.username;
@@ -471,12 +711,14 @@ public class PollActivity extends AppCompatActivity {
             FoodItem currentSecondChoice = secondChoiceDataAdapter.getItem(secondChoiceSpinner.getSelectedItemPosition());
             if (currentSecondChoice != null && currentSecondChoice.equals(choice)) {
                 removeChoice(!firstChoice);
+                resetSpinnerSelection(!firstChoice);
             }
             fileName = R.string.updateFirstChoice;
         } else {
             FoodItem currentFirstChoice = firstChoiceDataAdapter.getItem(firstChoiceSpinner.getSelectedItemPosition());
             if (currentFirstChoice != null && currentFirstChoice.equals(choice)) {
                 removeChoice(!firstChoice);
+                resetSpinnerSelection(!firstChoice);
             }
             fileName = R.string.updateSecondChoice;
         }
@@ -492,12 +734,12 @@ public class PollActivity extends AppCompatActivity {
                                 jObj = new JSONObject(response);
                                 isError = jObj.getBoolean("isError");
                                 if (!isError) {
-                                    Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.successMessage)), Toast.LENGTH_LONG).show();
 //                                String foodName = jObj.getString(getResources().getString(R.string.FOODNAME));
 //                                foodChoices.add(new FoodItem(paramFID, foodName));
                                     retrieveChoice(firstChoice);
                                 } else {
-//                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                                Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
