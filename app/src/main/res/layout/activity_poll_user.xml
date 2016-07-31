@@ -79,6 +79,8 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:minWidth="@dimen/spinner_min_width"
+                android:maxWidth="@dimen/spinner_max_width"
+
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerFirst"
                 android:layout_alignParentRight="true"/>
@@ -102,6 +104,7 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:minWidth="@dimen/spinner_min_width"
+                android:maxWidth="@dimen/spinner_max_width"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerSecond"
                 android:layout_alignParentRight="true" />

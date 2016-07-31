@@ -59,7 +59,11 @@ public class FoodItemPollResult extends FoodItem implements Comparable<FoodItemP
 
     @Override
     public int compareTo(FoodItemPollResult foodItem) {
-        return ((Integer) (this.getWeightedRating())).compareTo(foodItem.getWeightedRating());
+        int result = ((Integer) (foodItem.getWeightedRating())).compareTo(this.getWeightedRating());
+        if (result == 0) {
+            result = this.getFoodName().compareTo(foodItem.getFoodName());
+        }
+        return result;
     }
 
 

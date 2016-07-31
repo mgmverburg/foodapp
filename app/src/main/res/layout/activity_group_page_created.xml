@@ -26,35 +26,23 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/list"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:listSelector="@android:color/transparent"
-            android:dividerHeight="0.5sp"
-            android:layout_below="@+id/group_name"
-            android:layout_marginTop="30dp"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/buttondisband"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/disband_group"
-                app:elevation="5dp"
-                app:backgroundTint="@color/colorPrimary"
-                android:onClick="addNewNoteFunction2"
-                app:borderWidth="0dp"
-                app:rippleColor="@color/colorAccent"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="38dp"
-                android:layout_marginEnd="15dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/buttondisband"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/disband_group"
+            app:elevation="5dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:onClick="addNewNoteFunction2"
+            app:borderWidth="0dp"
+            app:rippleColor="@color/colorAccent"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="38dp"
+            android:layout_marginEnd="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonadd"
@@ -71,6 +59,19 @@
             android:layout_alignLeft="@+id/buttondisband"
             android:layout_alignStart="@+id/buttondisband"
             android:layout_marginBottom="15dp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:listSelector="@android:color/transparent"
+            android:dividerHeight="0.5sp"
+            android:layout_below="@+id/group_name"
+            android:layout_marginTop="30dp"/>
+
     </RelativeLayout>
 
     <LinearLayout

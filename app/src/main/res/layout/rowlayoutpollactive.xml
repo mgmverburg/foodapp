@@ -3,43 +3,52 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/foodchoice"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/firstchoicevote"
-        android:layout_alignBottom="@+id/foodchoice"
-        android:layout_toRightOf="@+id/foodchoice"
-        android:layout_toEndOf="@+id/foodchoice"
-        android:layout_marginLeft="54dp"
-        android:layout_marginStart="54dp" />
+        <TextView
+            android:layout_width="25dp"
+            android:maxWidth="25dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView"
+            android:gravity="center"
+            android:text="00"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/secondchoicevotes"
-        android:layout_alignBottom="@+id/foodchoice"
-        android:layout_toRightOf="@+id/firstchoicevote"
-        android:layout_toEndOf="@+id/firstchoicevote"
-        android:layout_marginLeft="45dp"
-        android:layout_marginStart="45dp" />
+        <TextView
+            android:layout_width="130dp"
+            android:maxWidth="130dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/foodchoice"
+            android:text="FOdokebasdkfwe"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView"
-        android:layout_alignBottom="@+id/foodchoice"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="40dp"
+            android:maxWidth="40dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/firstchoicevote"
+            android:gravity="center"
+            android:text="0"
+            android:layout_marginLeft="15dp" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:maxWidth="40dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0"
+            android:gravity="center"
+            android:id="@+id/secondchoicevotes"
+            android:layout_marginLeft="50dp" />
+
+
+
+    </LinearLayout>
 </RelativeLayout>

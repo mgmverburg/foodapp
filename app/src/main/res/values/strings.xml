@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"Food poll"</string>
+    <string name="app_name">"SimpliVote"</string>
     <string name="title_activity_login_registration">"Sign up/in"</string>
     <string name="title_activity_poll">"Poll"</string>
     <string name="title_activity_create_poll">"Poll creation"</string>
@@ -33,6 +33,7 @@
     <string name="timeDinnerEdit">"Time for dinner:"</string>
     <string name="timeDeadlineEditString">"Poll vote deadline:"</string>
     <string name="activePollAdminTitle">"Active poll overview"</string>
+    <string name="rank">"#"</string>
 
 
     <string name="successMessage">"success_msg"</string>

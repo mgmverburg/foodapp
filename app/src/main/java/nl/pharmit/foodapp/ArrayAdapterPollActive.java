@@ -34,13 +34,15 @@ public class ArrayAdapterPollActive extends ArrayAdapter<FoodItemPollResult> {
         TextView foodchoice = (TextView) rowView.findViewById(R.id.foodchoice);
         TextView firstchoices = (TextView) rowView.findViewById(R.id.firstchoicevote);
         TextView secondchoices = (TextView) rowView.findViewById(R.id.secondchoicevotes);
+
         final FoodItemPollResult food = getItem(position);
 //        rank.setText(food.rank);
         Collections.sort(this.values);
-        rank.setText(Integer.toString(position));
-        firstchoices.setText(food.getFirstChoiceAmount());
-        secondchoices.setText(food.getSecondChoiceAmount());
+        rank.setText(Integer.toString(position + 1));
+        firstchoices.setText(Integer.toString(food.getFirstChoiceAmount()));
+        secondchoices.setText(Integer.toString(food.getSecondChoiceAmount()));
         foodchoice.setText(food.getFoodName());
+
         return rowView;
     }
 }

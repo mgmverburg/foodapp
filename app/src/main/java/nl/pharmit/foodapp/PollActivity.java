@@ -48,7 +48,7 @@ public class PollActivity extends AppCompatActivity {
     Spinner firstChoiceSpinner, secondChoiceSpinner;
     List<FoodItem> foodChoicesFirst = new ArrayList<FoodItem>();
     List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
-    List<FoodItemPollResult> pollResultList = new ArrayList<FoodItemPollResult>();
+    List<FoodItemPollResult> pollResultList;
     SharedPreferences sharedPreferences;
     CustomSpinnerAdapter firstChoiceDataAdapter, secondChoiceDataAdapter;
     RequestQueue requestQueue;
@@ -166,34 +166,34 @@ public class PollActivity extends AppCompatActivity {
         });
         //@TODO: show poll vote amounts
 
-//        editDeadlineTimeTextView = (TextView) findViewById(R.id.timeDeadlineEdit);
-//        try {
-//            editDeadlineTimeTextView.setText(getTimeFormat(this.deadlineTime));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        editDeadlineTimeTextView = (TextView) findViewById(R.id.timeDeadlineEdit);
+        try {
+            editDeadlineTimeTextView.setText(getTimeFormat(this.deadlineTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-//        editDeadlineTimeTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Calendar mcurrentTime = Calendar.getInstance();
-//                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-//                int minute = mcurrentTime.get(Calendar.MINUTE);
-//                TimePickerDialog mTimePicker;
-//                mTimePicker = new TimePickerDialog(PollActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//                    @Override
-//                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                        //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
-//                        PollActivity.this.deadlineTimeHour = CreatePollActivity.pad(selectedHour);
-//                        PollActivity.this.deadlineTimeMinute = CreatePollActivity.pad(selectedMinute);
-//                        updatePollDeadline();
-//
-//                    }
-//                }, hour, minute, true);//Yes 24 hour time
-//                mTimePicker.setTitle("Change the time when the poll closes");
-//                mTimePicker.show();
-//            }
-//        });
+        editDeadlineTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(PollActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        //pad adds 0's that are usually removed like 04:07 becomes 4:7, now it fixes that
+                        PollActivity.this.deadlineTimeHour = CreatePollActivity.pad(selectedHour);
+                        PollActivity.this.deadlineTimeMinute = CreatePollActivity.pad(selectedMinute);
+                        updatePollDeadline();
+
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Change the time when the poll closes");
+                mTimePicker.show();
+            }
+        });
 
 
         FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);
@@ -224,6 +224,19 @@ public class PollActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(PollActivity.this, getResources().getString(R.string.poll_already_active),  Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        retrieveCurrentPollResults();
+
+        FloatingActionButton refreshVotes = (FloatingActionButton) findViewById(R.id.refreshVotes);
+        refreshVotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                retrieveCurrentPollResults();
+                FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
+                floatingActionMenu.close(true);
             }
         });
     }
@@ -459,13 +472,14 @@ public class PollActivity extends AppCompatActivity {
 
 
     private void retrieveCurrentPollResults() {
+        pollResultList = new ArrayList<FoodItemPollResult>();
         RequestManager.getInstance(PollActivity.this).getAllPollFood(PollActivity.this.pollID, new CustomListener<List<FoodItem>>()
         {
             @Override
             public void getResult(List<FoodItem> result) throws JSONException {
                 if (!(result == null))
                 {
-                    totalRequests = result.size();
+                    totalRequests = result.size()*2;
                     requestCount = 0;
                     for (int i = 0; i < result.size(); i++) {
                         FoodItem food = result.get(i);

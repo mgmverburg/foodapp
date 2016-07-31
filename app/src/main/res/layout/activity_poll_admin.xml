@@ -4,124 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_below="@id/imageView">
-
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/floatingActionMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp"
-        fab:menu_animationDelayPerItem="55"
-        fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_buttonSpacing="0dp"
-        fab:menu_colorNormal="#18b8c6"
-        fab:menu_colorPressed="#0d7077"
-        fab:menu_colorRipple="#99d4d4d4"
-        fab:menu_fab_label=""
-        fab:menu_fab_size="normal"
-        fab:menu_icon="@drawable/ic_poll"
-        fab:menu_labels_colorNormal="#333"
-        fab:menu_labels_colorPressed="#444"
-        fab:menu_labels_colorRipple="#66efecec"
-        fab:menu_labels_cornerRadius="3dp"
-        fab:menu_labels_ellipsize="none"
-        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-        fab:menu_labels_margin="0dp"
-        fab:menu_labels_maxLines="-1"
-        fab:menu_labels_padding="8dp"
-        fab:menu_labels_position="left"
-        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        fab:menu_labels_showShadow="true"
-        fab:menu_labels_singleLine="false"
-        fab:menu_labels_textColor="#f2f1f1"
-        fab:menu_labels_textSize="15sp"
-        fab:menu_openDirection="up"
-        fab:menu_shadowColor="#66aff198"
-        fab:menu_shadowRadius="4dp"
-        fab:menu_shadowXOffset="1dp"
-        fab:menu_shadowYOffset="4dp"
-        fab:menu_showShadow="true">
-
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/favoritePolls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"
-            fab:fab_label="Favorite polls"
-            fab:fab_size="mini"
-            fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/foodType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_food_type"
-            fab:fab_label="Food"
-            fab:fab_size="mini"
-            fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/createPoll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_label="Add new poll"
-            fab:fab_size="mini"
-            fab:fab_colorNormal="#18b8c6"
-            fab:fab_colorPressed="#0d7077" />
-
-    </com.github.clans.fab.FloatingActionMenu>
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listViewPollResults"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="First \nchoice:"
-            android:id="@+id/firstchoicevote"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/schoice"
-            android:layout_toStartOf="@+id/schoice"
-            android:layout_marginRight="49dp"
-            android:layout_marginEnd="49dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Second \nchoice:"
-            android:id="@+id/schoice"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/floatingActionMenu"
-            android:layout_alignEnd="@+id/floatingActionMenu"
-            android:layout_marginRight="47dp"
-            android:layout_marginEnd="47dp" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -151,4 +33,204 @@
             android:layout_weight="0.5"
             android:background="@drawable/tab_style"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/imageView">
+
+
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/activePollAdminTitle"
+                        android:id="@+id/voteTitle"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/item_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/timeDeadlineEditString"
+                            android:textSize="@dimen/default_text_size"
+                            android:gravity="left"
+                            android:id="@+id/textView"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/emptyTime"
+                            android:id="@+id/timeDeadlineEdit"
+                            android:gravity="right"
+                            android:layout_marginRight="40dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:focusableInTouchMode="true"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="bottom"
+                        android:textAlignment="center"
+                        android:text="@string/rank"
+                        android:id="@+id/rankText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="First\nchoices"
+                        android:textAlignment="center"
+                        android:id="@+id/firstchoicevote"
+                        android:layout_marginLeft="140dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Second\nchoices"
+                        android:id="@+id/schoice"
+                        android:textAlignment="center"
+                        android:layout_marginLeft="25dp" />
+                </LinearLayout>
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/listViewPollResults"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:listSelector="@android:color/transparent"/>
+            </LinearLayout>
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/floatingActionMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                fab:menu_animationDelayPerItem="55"
+                fab:menu_backgroundColor="@android:color/transparent"
+                fab:menu_buttonSpacing="0dp"
+                fab:menu_colorNormal="#18b8c6"
+                fab:menu_colorPressed="#0d7077"
+                fab:menu_colorRipple="#99d4d4d4"
+                fab:menu_fab_label=""
+                fab:menu_fab_size="normal"
+                fab:menu_icon="@drawable/ic_poll"
+                fab:menu_labels_colorNormal="#333"
+                fab:menu_labels_colorPressed="#444"
+                fab:menu_labels_colorRipple="#66efecec"
+                fab:menu_labels_cornerRadius="3dp"
+                fab:menu_labels_ellipsize="none"
+                fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                fab:menu_labels_margin="0dp"
+                fab:menu_labels_maxLines="-1"
+                fab:menu_labels_padding="8dp"
+                fab:menu_labels_position="left"
+                fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                fab:menu_labels_showShadow="true"
+                fab:menu_labels_singleLine="false"
+                fab:menu_labels_textColor="#f2f1f1"
+                fab:menu_labels_textSize="15sp"
+                fab:menu_openDirection="up"
+                fab:menu_shadowColor="#66aff198"
+                fab:menu_shadowRadius="4dp"
+                fab:menu_shadowXOffset="1dp"
+                fab:menu_shadowYOffset="4dp"
+                fab:menu_showShadow="true">
+
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/favoritePolls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_favorite"
+                    fab:fab_label="Favorite polls"
+                    fab:fab_size="mini"
+                    fab:fab_colorNormal="#18b8c6"
+                    fab:fab_colorPressed="#0d7077" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/foodType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_food_type"
+                    fab:fab_label="Food"
+                    fab:fab_size="mini"
+                    fab:fab_colorNormal="#18b8c6"
+                    fab:fab_colorPressed="#0d7077" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/createPoll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/fab_add"
+                    fab:fab_label="Add new poll"
+                    fab:fab_size="mini"
+                    fab:fab_colorNormal="#18b8c6"
+                    fab:fab_colorPressed="#0d7077" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/refreshVotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_update_white_24dp"
+                    fab:fab_label="Refresh votes"
+                    fab:fab_size="mini"
+                    fab:fab_colorNormal="#18b8c6"
+                    fab:fab_colorPressed="#0d7077" />
+
+            </com.github.clans.fab.FloatingActionMenu>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
 </RelativeLayout>
