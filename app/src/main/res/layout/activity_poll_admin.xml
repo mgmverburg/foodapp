@@ -101,10 +101,10 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="First \nchoice:"
-            android:id="@+id/textView"
+            android:id="@+id/firstchoicevote"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/textView2"
-            android:layout_toStartOf="@+id/textView2"
+            android:layout_toLeftOf="@+id/schoice"
+            android:layout_toStartOf="@+id/schoice"
             android:layout_marginRight="49dp"
             android:layout_marginEnd="49dp" />
 
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Second \nchoice:"
-            android:id="@+id/textView2"
+            android:id="@+id/schoice"
             android:layout_alignParentTop="true"
             android:layout_alignRight="@+id/floatingActionMenu"
             android:layout_alignEnd="@+id/floatingActionMenu"
