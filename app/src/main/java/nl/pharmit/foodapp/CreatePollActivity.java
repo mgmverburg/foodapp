@@ -273,7 +273,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         });
     }
 
-    public String pad(int input) {
+    public static String pad(int input) {
         String str = "";
         if (input >= 10) {
             str = Integer.toString(input);

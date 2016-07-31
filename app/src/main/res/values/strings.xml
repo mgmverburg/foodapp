@@ -28,7 +28,11 @@
     <string name="secondChoice">"Second choice:"</string>
     <string name="firstChoice">"First choice:"</string>
     <string name="pollVoteTitle">"Choose your preference"</string>
-    <string name="deadlinePollVote">"Deadline"</string>
+    <string name="deadlinePollVote">"Poll closes at: "</string>
+    <string name="dinnerPollVote">"Dinner at: ""</string>
+    <string name="timeDinnerEdit">"Time for dinner:"</string>
+    <string name="timeDeadlineEditString">"Poll vote deadline:"</string>
+    <string name="activePollAdminTitle">"Active poll overview"</string>
 
 
     <string name="successMessage">"success_msg"</string>
@@ -50,6 +54,7 @@
     <string name="getFood">"GetFood.php"</string>
     <string name="updateFirstChoice">"UpdatePollFirstChoice.php"</string>
     <string name="updateSecondChoice">"UpdatePollSecondChoice.php"</string>
+    <string name="updatePollDeadline">"UpdatePollDeadline.php"</string>
     <string name="getFirstChoice">"GetPollFoodFirstChoice.php"</string>
     <string name="getSecondChoice">"GetPollFoodSecondChoice.php"</string>
     <string name="removeFirstChoice">"DeletePollFoodFirstChoice.php"</string>
@@ -57,6 +62,9 @@
     <string name="getAllFood">"GetAllFood.php"</string>
     <string name="addFood">"PostFood.php"</string>
     <string name="addFoodChoice">"PostPollFood.php"</string>
+    <string name="updatePollJoining">"UpdatePollJoining.php"</string>
+    <string name="removePollJoining">"DeletePollJoining.php"</string>
+    <string name="getPollJoining">"GetPollJoining.php"</string>
     <string name="removeFoodChoice">"DeletePollFood.php"</string>
     <string name="createNewPoll">"PostPoll.php</string>
     <string name="USERNAME">"username"</string>
@@ -78,6 +86,8 @@
     <string name="POLLINFO">"poll"</string>
     <string name="DINNERTIME">"dinnerTime"</string>
     <string name="DEADLINETIME">"deadlineTime"</string>
+    <string name="JOINING">"joining"</string>
+    <string name="POLLCLOSED">"closed"</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

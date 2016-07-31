@@ -139,6 +139,30 @@
         </LinearLayout>
 
         <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/item_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deadlinePollVote"
+            android:id="@+id/deadlineText"
+            android:textSize="@dimen/default_text_size"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emptyTime"
+            android:id="@+id/currentDeadlineTime"
+            android:textSize="@dimen/default_text_size"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -148,15 +172,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/deadlinePollVote"
-                android:id="@+id/deadlineText"
+                android:text="@string/dinnerPollVote"
+                android:id="@+id/dinnerText"
+                android:textSize="@dimen/default_text_size"
                 android:layout_marginRight="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/emptyTime"
-                android:id="@+id/currentDeadlineTime"
+                android:id="@+id/dinnerTime"
+                android:textSize="@dimen/default_text_size"
                 android:layout_marginLeft="10dp"/>
         </LinearLayout>
 

@@ -102,7 +102,9 @@ public class LoginRegistrationActivity extends AppCompatActivity {
         } else {
             loginFormUsername.setError(null);
         }
-        if (password.length() < 4) {
+        if (password.isEmpty()) {
+            loginFormPassword.setError("Password is required");
+        } else if (password.length() < 4) {
             loginFormPassword.setError("Password of at least 4 characters is required!");
         } else {
             loginFormPassword.setError(null);
