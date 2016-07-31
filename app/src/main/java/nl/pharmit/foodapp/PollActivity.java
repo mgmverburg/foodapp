@@ -114,6 +114,8 @@ public class PollActivity extends AppCompatActivity {
                         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
                         menu.setEnabled(false);
                         menu.setVisibility(View.INVISIBLE);
+                        polltab3 = (ToggleButton) findViewById(R.id.polltab2);
+                        grouptab3 =(ToggleButton) findViewById(R.id.grouptab2);
 
                         if (groupID != null && !groupID.isEmpty()) {
                             message.setText("There is currently no poll active. Wait for the admin to create one.");
