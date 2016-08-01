@@ -110,6 +110,7 @@ public class FavoritePollActivity extends AppCompatActivity implements CustomLis
     @Override
     public void getResult(String removeFavorite) {
         favoritePollsAdapter.remove(removeFavorite);
+        Toast.makeText(FavoritePollActivity.this, "Poll deleted", Toast.LENGTH_SHORT).show();
 //        retrievePollFoodOptions();
     }
 
