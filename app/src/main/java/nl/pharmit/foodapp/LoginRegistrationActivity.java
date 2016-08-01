@@ -34,6 +34,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
 
     private EditText loginFormUsername;
     private EditText loginFormPassword;
+    private EditText confirmPassword;
     SharedPreferences sharedPreferences;
 
     //TODO progress dialog to show that something is being executed
@@ -46,6 +47,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
 
         loginFormUsername = (EditText) findViewById(R.id.formUsername);
         loginFormPassword = (EditText) findViewById(R.id.formPassword);
+        confirmPassword = (EditText) findViewById(R.id.confirmPassword);
         Button loginButton = (Button) findViewById(R.id.btnLogin);
         Button registerButton = (Button) findViewById(R.id.btnRegister);
 
@@ -56,13 +58,15 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                 // Store values at the time of the register button click.
                 String username = loginFormUsername.getText().toString();
                 String password = loginFormPassword.getText().toString();
+                String confirm = confirmPassword.getText().toString();
+
                 // Check for empty data in the form
-                if (!username.isEmpty() && password.length() >= 4) {
+                if (!username.isEmpty() && password.length() >= 4 && confirm.equals(password)) {
                     // login user
                     attemptRegister(username, password);
                 } else {
                     // Prompt user to enter credentials
-                    setError(username, password);
+                    setError(username, password, confirm);
 //                    Toast.makeText(getApplicationContext(),
 //                            "Please enter your desired username and password", Toast.LENGTH_LONG)
 //                            .show();
@@ -85,7 +89,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                     // login user
                     attemptLogin(username, password);
                 } else {
-                    setError(username,password);
+                    setError(username,password, password);
                     // Prompt user to enter credentials
 //                    Toast.makeText(getApplicationContext(),
 //                            "Please enter your username and password", Toast.LENGTH_LONG)
@@ -96,7 +100,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void setError(String username, String password) {
+    private void setError(String username, String password, String confirm) {
         if (username.isEmpty()) {
             loginFormUsername.setError("Username is required!");
         } else {
@@ -108,6 +112,12 @@ public class LoginRegistrationActivity extends AppCompatActivity {
             loginFormPassword.setError("Password of at least 4 characters is required!");
         } else {
             loginFormPassword.setError(null);
+        }
+        if(!confirm.equals(password) || confirm.isEmpty() || confirm.length() < 4 ){
+            confirmPassword.setError("Passwords do not match!");
+        }
+        else {
+            confirmPassword.setError(null);
         }
     }
 
