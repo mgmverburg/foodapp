@@ -168,6 +168,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
 
     private void getFavoritePoll(String name) {
         foodOptions = new ArrayList<FoodItem>();
+        pollOptionsAdapter.notifyDataSetChanged();
         final String paramFavoriteName = name;
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
