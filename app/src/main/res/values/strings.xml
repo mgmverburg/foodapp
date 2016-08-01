@@ -92,6 +92,7 @@
     <string name="JOINING">"joining"</string>
     <string name="POLLCLOSED">"closed"</string>
     <string name="VOTEAMOUNT">"amount"</string>
+    <string name="FAVORITENAME">"favoriteName"</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
