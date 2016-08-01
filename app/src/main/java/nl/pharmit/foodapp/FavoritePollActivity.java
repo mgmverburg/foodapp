@@ -44,6 +44,12 @@ public class FavoritePollActivity extends AppCompatActivity implements CustomLis
         names = new ArrayList<String>();
 
         getAllFavoritePolls();
+        addNewFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(FavoritePollActivity.this, NewFavoritePollActivity.class));
+            }
+        });
 
     }
 
@@ -73,12 +79,7 @@ public class FavoritePollActivity extends AppCompatActivity implements CustomLis
                                     if (requestCount == totalNumberRequests) {
                                         favoritePollsAdapter = new ArrayAdapterFavorites(FavoritePollActivity.this, names, FavoritePollActivity.this);
                                         favoritePolls.setAdapter(favoritePollsAdapter);
-                                        addNewFavorite.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                startActivity(new Intent(FavoritePollActivity.this, NewFavoritePollActivity.class));
-                                            }
-                                        });
+
                                     }
 
                                 }
