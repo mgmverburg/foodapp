@@ -9,6 +9,7 @@
     <dimen name="button_height_padding">20dp</dimen>
     <dimen name="spinner_min_width">150dp</dimen>
     <dimen name="spinner_max_width">150dp</dimen>
+    <dimen name="clickable_width_padding">10dp</dimen>
     <item name="popup_width_ratio" type="dimen" format="float">0.8</item>
 
 </resources>

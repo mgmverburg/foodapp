@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -27,7 +26,6 @@ import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +125,7 @@ public class PollActivity extends AppCompatActivity {
                             message.setText("You are not yet part of a group, so you will not see any polls.");
                         }
                     } else {
+                        enableAdminFloatButtons();
                         message.setText("There is currently no poll active");
                     }
                     polltab3 = (ToggleButton) findViewById(R.id.polltab2);
@@ -196,6 +194,23 @@ public class PollActivity extends AppCompatActivity {
         });
 
 
+        enableAdminFloatButtons();
+
+        retrieveCurrentPollResults();
+
+        FloatingActionButton refreshVotes = (FloatingActionButton) findViewById(R.id.refreshVotes);
+        refreshVotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                retrieveCurrentPollResults();
+                FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
+                floatingActionMenu.close(true);
+            }
+        });
+    }
+
+    private void enableAdminFloatButtons() {
         FloatingActionButton foodTypeButton = (FloatingActionButton) findViewById(R.id.foodType);
         foodTypeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,19 +239,6 @@ public class PollActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(PollActivity.this, getResources().getString(R.string.poll_already_active),  Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        retrieveCurrentPollResults();
-
-        FloatingActionButton refreshVotes = (FloatingActionButton) findViewById(R.id.refreshVotes);
-        refreshVotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                retrieveCurrentPollResults();
-                FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floatingActionMenu);
-                floatingActionMenu.close(true);
             }
         });
     }
@@ -315,6 +317,7 @@ public class PollActivity extends AppCompatActivity {
                 if (isChecked) {
                     if (!firstRetrieval) { //this is the case when we first retrieve the value,
                         //because then we don't want it to update it, since the value came from the server
+                        setJoining(true);
                         updateJoining(true);
                     }
                 }
@@ -329,6 +332,7 @@ public class PollActivity extends AppCompatActivity {
                 if (isChecked) {
                     if (!firstRetrieval) {//this is the case when we first retrieve the value,
                         //because then we don't want it to update it, since the value came from the server
+                        setJoining(false);
                         updateJoining(false);
                     }
                 }
@@ -762,9 +766,11 @@ public class PollActivity extends AppCompatActivity {
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                setJoining(joining);
+
 //                                retrieveChoice(firstChoice);
                             } else {
+                                notjoining.setChecked(false);
+                                nopreference.setChecked(false);
                                 Toast.makeText(PollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
