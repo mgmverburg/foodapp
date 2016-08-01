@@ -66,6 +66,7 @@
     <string name="addFavoritePollFoodChoice">"PostFavoritePollFood.php"</string>
     <string name="getAllFavoritePolls">"GetAllFavoritePolls.php"</string>
     <string name="removeFavoritePoll">"DeleteFavoritePoll.php"</string>
+    <string name="removeFavoritePollFood">"DeleteFavoritePollFood.php"</string>
     <string name="getFavoritePoll">"GetFavoritePoll.php"</string>
 <string name="getAllFood">"GetAllFood.php"</string>
 <string name="addFood">"PostFood.php"</string>
