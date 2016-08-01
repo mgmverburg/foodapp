@@ -334,9 +334,61 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
 
     @Override
     public void getResult(FoodItem removedFood) {
-        pollOptionsAdapter.remove(removedFood);
+        if (creatingNew) {
+            pollOptionsAdapter.remove(removedFood);
+        } else {
+            removeFavoritePollFood(existingName, removedFood);
+
+        }
 //        retrievePollFoodOptions();
     }
 
+    private void removeFavoritePollFood(String name, FoodItem food) {
+        final String paramFavoriteName = name;
+        final String paramFoodID = food.getFoodID();
+//        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
+                + getResources().getString(R.string.removeFavoritePoll) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        String message = "";
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                getFavoritePoll(paramFavoriteName);
+                                //reload page with data
+                            } else {
+                                Toast.makeText(NewFavoritePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(NewFavoritePollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.FAVORITENAME), paramFavoriteName);
+                params.put(getResources().getString(R.string.FOODID), paramFoodID);
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
 }
