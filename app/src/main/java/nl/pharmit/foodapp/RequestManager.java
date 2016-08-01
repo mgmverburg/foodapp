@@ -180,6 +180,66 @@ public class RequestManager {
         requestQueue.add(stringRequest);
     }
 
+    private void getFavoritePoll(String name, final CustomListener<List<FoodItem>> listener) {
+        final List<FoodItem> foodOptions = new ArrayList<FoodItem>();
+        final String paramFavoriteName = name;
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
+                + context.getResources().getString(R.string.getFavoritePoll) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                JSONArray foodOptionsArray = jObj.getJSONArray(context.getResources().getString(R.string.FOODITEMS));
+                                final int totalNumberRequests = foodOptionsArray.length();
+                                requestCount = 0;
+//                                final List<FoodItem> foodChoices = new ArrayList<FoodItem>();
+                                for (int i=0;i<foodOptionsArray.length();i++) {
+                                    JSONObject foodOption = null;
+                                    foodOption = foodOptionsArray.getJSONObject(i);
+                                    final String foodID = foodOption.getString(context.getResources().getString(R.string.FOODID));
+                                    RequestManager.this.getFood(foodID, new CustomListener<JSONObject>() {
+                                        @Override
+                                        public void getResult(JSONObject object) throws JSONException {
+                                            requestCount++;
+                                            String foodName = object.getString(context.getResources().getString(R.string.FOODNAME));
+                                            foodOptions.add(new FoodItem(foodID, foodName));
+                                            if (requestCount == totalNumberRequests) {
+                                                listener.getResult(foodOptions);
+                                            }
+                                        }
+                                    });
+
+                                }
+                            } else {
+                                Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(context.getResources().getString(R.string.FAVORITENAME), paramFavoriteName);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
     public void getFood(String foodID, final CustomListener<JSONObject> listener) {
         final String paramFID = foodID;
         //making HTTP request
