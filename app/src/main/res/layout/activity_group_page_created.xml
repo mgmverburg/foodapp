@@ -37,9 +37,9 @@
             app:borderWidth="0dp"
             app:rippleColor="@color/colorAccent"
             android:layout_gravity="bottom"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="38dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -58,7 +58,7 @@
             android:layout_above="@+id/buttondisband"
             android:layout_alignLeft="@+id/buttondisband"
             android:layout_alignStart="@+id/buttondisband"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp" />
 
         <ListView
             android:layout_width="match_parent"
