@@ -123,7 +123,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
                     } else if (!foodOptions.contains(selectedChoice) && creatingNew) {
                         pollOptionsAdapter.add(selectedChoice);
                     } else {
-                        NewFavoritePollActivity.this.postFavoritePollFood(existingName, selectedChoice.getFoodID());
+                        NewFavoritePollActivity.this.postFavoritePollFood(existingName, selectedChoice);
                     }
                 }
             }
@@ -279,17 +279,17 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
         totalRequestCount = pollOptionsAdapter.getCount();
         for (int i = 0; i < pollOptionsAdapter.getCount(); i++) {
             FoodItem option = pollOptionsAdapter.getItem(i);
-            String foodID = option.getFoodID();
-            postFavoritePollFood(paramFavoriteName, foodID);
+//            String foodID = option.getFoodID();
+            postFavoritePollFood(paramFavoriteName, option);
 
         }
     }
 
 
 
-    private void postFavoritePollFood(String name, String foodID) {
+    private void postFavoritePollFood(String name, final FoodItem food) {
         final String paramFavoriteName = name;
-        final String paramFID = foodID;
+        final String paramFID = food.getFoodID();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
                 + getResources().getString(R.string.addFavoritePollFoodChoice),
                 new Response.Listener<String>() {
@@ -306,7 +306,8 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
                                     startActivity(new Intent(NewFavoritePollActivity.this, FavoritePollActivity.class));
                                 }
                                 if (!creatingNew) {
-                                    getFavoritePoll(existingName);
+                                    pollOptionsAdapter.add(food);
+//                                    getFavoritePoll(existingName);
                                 }
                             } else {
                                 Toast.makeText(NewFavoritePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
@@ -344,7 +345,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
 //        retrievePollFoodOptions();
     }
 
-    private void removeFavoritePollFood(String name, FoodItem food) {
+    private void removeFavoritePollFood(String name, final FoodItem food) {
         final String paramFavoriteName = name;
         final String paramFoodID = food.getFoodID();
 //        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
@@ -361,7 +362,8 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
                             jObj = new JSONObject(response);
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
-                                getFavoritePoll(paramFavoriteName);
+                                pollOptionsAdapter.remove(food);
+//                                getFavoritePoll(paramFavoriteName);
                                 //reload page with data
                             } else {
                                 Toast.makeText(NewFavoritePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
