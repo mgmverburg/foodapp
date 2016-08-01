@@ -29,7 +29,7 @@
                 android:gravity="center"
                 android:focusable="true"
                 android:clickable="true"
-                />
+                android:focusableInTouchMode="true"/>
 
         </LinearLayout>
 
