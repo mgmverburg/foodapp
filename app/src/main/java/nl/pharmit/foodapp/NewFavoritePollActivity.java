@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +70,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
         textPollChoices = (TextView) findViewById(R.id.textViewPollChoices);
 
         if (!creatingNew) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             pollName.setEnabled(false);
             pollName.setClickable(false);
             pollName.setText(existingName);
@@ -301,6 +303,9 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
                                 requestCount++;
                                 if (requestCount == totalRequestCount && creatingNew) {
                                     startActivity(new Intent(NewFavoritePollActivity.this, FavoritePollActivity.class));
+                                }
+                                if (!creatingNew) {
+                                    getFavoritePoll(existingName);
                                 }
                             } else {
                                 Toast.makeText(NewFavoritePollActivity.this, jObj.getString(getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
