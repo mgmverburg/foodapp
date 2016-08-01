@@ -40,8 +40,9 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
     Button addFood, startPoll;
     List<FoodItem> allFoodTypes = new ArrayList<FoodItem>();
     RequestQueue requestQueue;
-    Spinner spinner;
-    CustomSpinnerAdapter dataAdapter;
+    List<String> favoritesList;
+    Spinner spinner, spinnerFavorites;
+    CustomSpinnerAdapter dataAdapter, favoritesAdapter;
     SharedPreferences sharedPreferences;
     String pollID, groupID;
     CreatePollFoodArrayAdapter pollOptionsAdapter;
@@ -66,6 +67,7 @@ public class CreatePollActivity extends AppCompatActivity implements CustomListe
         deadlineTime = (TextView) findViewById(R.id.timePickerDeadline);
         listFoodChoices = (ListView) findViewById(R.id.listViewPollChoices);
         spinner = (Spinner) findViewById(R.id.spinner);
+        spinnerFavorites = (Spinner) findViewById(R.id.sp)
         addFood = (Button) findViewById(R.id.addFoodButton);
         startPoll = (Button) findViewById(R.id.startPollButton);
         textPollChoices = (TextView) findViewById(R.id.textViewPollChoices);
