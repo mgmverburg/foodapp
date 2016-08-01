@@ -349,7 +349,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
 //        sharedPreferences = getSharedPreferences(getResources().getString(R.string.session), Context.MODE_PRIVATE);
         //making HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL)
-                + getResources().getString(R.string.removeFavoritePoll) ,
+                + getResources().getString(R.string.removeFavoritePollFood) ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
