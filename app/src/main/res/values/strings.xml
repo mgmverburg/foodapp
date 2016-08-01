@@ -62,14 +62,19 @@
     <string name="getSecondChoice">"GetPollFoodSecondChoice.php"</string>
     <string name="removeFirstChoice">"DeletePollFoodFirstChoice.php"</string>
     <string name="removeSecondChoice">"DeletePollFoodSecondChoice.php"</string>
-    <string name="getAllFood">"GetAllFood.php"</string>
-    <string name="addFood">"PostFood.php"</string>
-    <string name="addFoodChoice">"PostPollFood.php"</string>
-    <string name="updatePollJoining">"UpdatePollJoining.php"</string>
-    <string name="removePollJoining">"DeletePollJoining.php"</string>
-    <string name="getPollJoining">"GetPollJoining.php"</string>
-    <string name="removeFoodChoice">"DeletePollFood.php"</string>
-    <string name="createNewPoll">"PostPoll.php</string>
+    <string name="saveFavoritePoll">"PostFavoritePoll.php"</string>
+    <string name="addFavoritePollFoodChoice">"PostFavoritePollFood.php"</string>
+    <string name="getAllFavoritePolls">"GetAllFavoritePolls.php"</string>
+    <string name="removeFavoritePoll">"DeleteFavoritePoll.php"</string>
+    <string name="getFavoritePoll">"GetFavoritePoll.php"</string>
+<string name="getAllFood">"GetAllFood.php"</string>
+<string name="addFood">"PostFood.php"</string>
+<string name="addFoodChoice">"PostPollFood.php"</string>
+<string name="updatePollJoining">"UpdatePollJoining.php"</string>
+<string name="removePollJoining">"DeletePollJoining.php"</string>
+<string name="getPollJoining">"GetPollJoining.php"</string>
+<string name="removeFoodChoice">"DeletePollFood.php"</string>
+<string name="createNewPoll">"PostPoll.php</string>
     <string name="USERNAME">"username"</string>
     <string name="PASSWORD">"password"</string>
     <string name="GROUPID">"GID"</string>
@@ -93,6 +98,8 @@
     <string name="POLLCLOSED">"closed"</string>
     <string name="VOTEAMOUNT">"amount"</string>
     <string name="FAVORITENAME">"favoriteName"</string>
+    <string name="FAVORITENAMERETURN">"name"</string>
+    <string name="FAVORITEITEMS">"items"</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
