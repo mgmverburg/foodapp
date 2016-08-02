@@ -34,6 +34,8 @@
     <string name="timeDeadlineEditString">"Poll vote deadline:"</string>
     <string name="activePollAdminTitle">"Active poll overview"</string>
     <string name="rank">"#"</string>
+    <string name ="loadFavorites">"Choose Favorite"</string>
+    <string name="joiningSeparator">"/"</string>
 
 
     <string name="successMessage">"success_msg"</string>
@@ -68,12 +70,18 @@
     <string name="removeFavoritePoll">"DeleteFavoritePoll.php"</string>
     <string name="removeFavoritePollFood">"DeleteFavoritePollFood.php"</string>
     <string name="getFavoritePoll">"GetFavoritePoll.php"</string>
+    <string name="notJoining">"0"</string>
+    <string name="joining">"1"</string>
+    <string name="joiningAmount">"joinAmount"</string>
+    <string name="voteJoining">"votes"</string>
+    <string name="uniqueVoterAmount">"userVoteAmount"</string>
 <string name="getAllFood">"GetAllFood.php"</string>
 <string name="addFood">"PostFood.php"</string>
 <string name="addFoodChoice">"PostPollFood.php"</string>
 <string name="updatePollJoining">"UpdatePollJoining.php"</string>
 <string name="removePollJoining">"DeletePollJoining.php"</string>
 <string name="getPollJoining">"GetPollJoining.php"</string>
+    <string name="getPollJoiningAmount">"GetPollJoiningCount.php"</string>
 <string name="removeFoodChoice">"DeletePollFood.php"</string>
 <string name="createNewPoll">"PostPoll.php</string>
     <string name="USERNAME">"username"</string>

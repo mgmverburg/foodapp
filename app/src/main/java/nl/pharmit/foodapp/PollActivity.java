@@ -26,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,13 +48,13 @@ public class PollActivity extends AppCompatActivity {
     List<FoodItem> foodChoicesSecond = new ArrayList<FoodItem>();
     List<FoodItemPollResult> pollResultList;
     SharedPreferences sharedPreferences;
-    CustomSpinnerAdapter firstChoiceDataAdapter, secondChoiceDataAdapter;
+    CustomSpinnerAdapterFood firstChoiceDataAdapter, secondChoiceDataAdapter;
     RequestQueue requestQueue;
     int requestCount, totalRequests;
     FoodItem noselection, oldFirstChoice, oldSecondChoice;
     ToggleButton nopreference;
     ToggleButton notjoining;
-    TextView deadlineTimeTextView, dinnerTimeTextView, editDeadlineTimeTextView;
+    TextView deadlineTimeTextView, dinnerTimeTextView, editDeadlineTimeTextView, joiningAmount, notJoiningAmount;
     boolean firstRetrieval;
     ToggleButton polltab2;
     ToggleButton grouptab2;
@@ -163,6 +164,9 @@ public class PollActivity extends AppCompatActivity {
             }
         });
         //@TODO: show poll vote amounts
+
+        joiningAmount = (TextView) findViewById(R.id.numberJoining);
+        notJoiningAmount = (TextView) findViewById(R.id.numberNotJoining);
 
         editDeadlineTimeTextView = (TextView) findViewById(R.id.timeDeadlineEdit);
         try {
@@ -356,9 +360,9 @@ public class PollActivity extends AppCompatActivity {
                 {
                     foodChoicesFirst.addAll(result);
                     foodChoicesSecond.addAll(result);
-                    firstChoiceDataAdapter = new CustomSpinnerAdapter
+                    firstChoiceDataAdapter = new CustomSpinnerAdapterFood
                             (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesFirst);
-                    secondChoiceDataAdapter = new CustomSpinnerAdapter
+                    secondChoiceDataAdapter = new CustomSpinnerAdapterFood
                             (PollActivity.this, android.R.layout.simple_spinner_dropdown_item, foodChoicesSecond);
                     firstChoiceDataAdapter.insert(noselection,0);
                     secondChoiceDataAdapter.insert(noselection,0);
@@ -490,9 +494,62 @@ public class PollActivity extends AppCompatActivity {
                         FoodItemPollResult foodResult = new FoodItemPollResult(food.getFoodID(), food.getFoodName());
                         retrieveChoiceAmount(food.getFoodID(), true, foodResult);
                     }
+                    retrieveJoiningAmounts();
                 }
             }
         });
+    }
+
+    private void retrieveJoiningAmounts() {
+        final String paramPID = this.pollID;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.rootURL) + getResources().getString(R.string.getPollJoiningAmount) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                JSONObject notJoining = jObj.getJSONObject(getResources().getString(R.string.notJoining));
+                                String notJoiningPressedAmount =  notJoining.getString(getResources().getString(R.string.joiningAmount));
+                                notJoiningAmount.setText(notJoiningPressedAmount);
+                                JSONObject joining = jObj.getJSONObject(getResources().getString(R.string.joining));
+                                JSONObject uniqueVotes = jObj.getJSONObject(getResources().getString(R.string.voteJoining));
+                                int totalJoining = joining.getInt(getResources().getString(R.string.joiningAmount)) +
+                                        uniqueVotes.getInt(getResources().getString(R.string.uniqueVoterAmount));
+                                joiningAmount.setText(Integer.toString(totalJoining));
+//                                int joiningInt = jObj.getInt(getResources().getString(R.string.JOINING));
+//                                boolean joining;
+//                                if (joiningInt == 1) {
+//                                    joining = true;
+//                                } else {
+//                                    joining = false;
+//                                }
+//                                setJoining(joining);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(getResources().getString(R.string.POLLID), paramPID);
+                return params;
+            }
+        };
+
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void showCurrentPollResults() {

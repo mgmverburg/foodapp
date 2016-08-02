@@ -11,12 +11,15 @@ import java.util.List;
 /**
  * Created by Michiel on 7/29/2016.
  */
-public class CustomSpinnerAdapter extends ArrayAdapter<FoodItem> {
+public class CustomSpinnerAdapterFood extends ArrayAdapter<FoodItem> {
 
     private int hidingItemIndex = 0;
+    private final List<FoodItem> items;
 
-    public CustomSpinnerAdapter(Context context, int textViewResourceId, List<FoodItem> objects) {
+
+    public CustomSpinnerAdapterFood(Context context, int textViewResourceId, List<FoodItem> objects) {
         super(context, textViewResourceId, objects);
+        this.items = objects;
 //        this.hidingItemIndex = hidingItemIndex;
     }
 
@@ -33,4 +36,8 @@ public class CustomSpinnerAdapter extends ArrayAdapter<FoodItem> {
         }
         return v;
     }
+
+//    public List<FoodItem> getItems() {
+//        return items;
+//    }
 }

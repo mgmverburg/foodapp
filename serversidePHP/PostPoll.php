@@ -18,6 +18,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   include("GetGroupFunction.php");
   $groupResult = GetGroup($connection);
   if(mysqli_num_rows($groupResult) == 1) {
+    //@TODO: dinnerTime, deadlineTime still need to be added
+
     $pollStatement = mysqli_prepare($connection, "INSERT INTO Poll (GID, dinnerTime, deadlineTime) VALUES (?, ?, ?)");
     mysqli_stmt_bind_param($pollStatement, "iss", $GID, $dinnerTime, $deadlineTime);
     $pollStatementSuccess = mysqli_stmt_execute($pollStatement);

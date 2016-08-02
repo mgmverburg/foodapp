@@ -14,10 +14,12 @@ import java.util.List;
 
 public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
     private final CustomListener<FoodItem> listener;
+    private final List<FoodItem> items;
 
     public CreatePollFoodArrayAdapter(Context context, CustomListener<FoodItem> listener, List<FoodItem> values) {
         super(context, 0, values);
         this.listener = listener;
+        this.items =values;
     }
 
 
@@ -56,5 +58,9 @@ public class CreatePollFoodArrayAdapter extends ArrayAdapter<FoodItem> {
 //        }
 
         return convertView;
+    }
+
+    public List<FoodItem> getItems() {
+        return items;
     }
 }

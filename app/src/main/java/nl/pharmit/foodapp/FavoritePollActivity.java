@@ -30,7 +30,7 @@ import java.util.Map;
 public class FavoritePollActivity extends AppCompatActivity implements CustomListener<String> {
     ListView favoritePolls;
     ArrayAdapterFavorites favoritePollsAdapter;
-    String[] values;
+//    String[] values;
     List<String> names;
     Button addNewFavorite ;
     int requestCount;
@@ -43,7 +43,14 @@ public class FavoritePollActivity extends AppCompatActivity implements CustomLis
 
         names = new ArrayList<String>();
 
-        getAllFavoritePolls();
+        RequestManager.getInstance(this).getAllFavoritePolls(new CustomListener<List<String>>() {
+            @Override
+            public void getResult(List<String> result) throws JSONException {
+                names.addAll(result);
+                favoritePollsAdapter = new ArrayAdapterFavorites(FavoritePollActivity.this, names, FavoritePollActivity.this);
+                favoritePolls.setAdapter(favoritePollsAdapter);
+            }
+        });
         addNewFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,60 +58,6 @@ public class FavoritePollActivity extends AppCompatActivity implements CustomLis
             }
         });
 
-    }
-
-    private void getAllFavoritePolls() {
-        //making HTTP request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, this.getResources().getString(R.string.rootURL)
-                + this.getResources().getString(R.string.getAllFavoritePolls) ,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jObj = null;
-                        Boolean isError = false;
-                        try {
-                            jObj = new JSONObject(response);
-                            isError = jObj.getBoolean("isError");
-                            if (!isError) {
-                                JSONArray favoritePollsArray = jObj.getJSONArray(FavoritePollActivity.this.getResources().getString(R.string.FOODITEMS));
-                                final int totalNumberRequests = favoritePollsArray.length();
-                                requestCount = 0;
-//                                final List<FoodItem> foodChoices = new ArrayList<FoodItem>();
-                                for (int i=0;i<favoritePollsArray.length();i++) {
-                                    JSONObject favoritePoll = null;
-                                    favoritePoll = favoritePollsArray.getJSONObject(i);
-                                    final String name = favoritePoll.getString(FavoritePollActivity.this.getResources().getString(R.string.FAVORITENAMERETURN));
-                                    requestCount++;
-                                    names.add(name);
-                                    if (requestCount == totalNumberRequests) {
-                                        favoritePollsAdapter = new ArrayAdapterFavorites(FavoritePollActivity.this, names, FavoritePollActivity.this);
-                                        favoritePolls.setAdapter(favoritePollsAdapter);
-
-                                    }
-
-                                }
-                            } else {
-                                Toast.makeText(FavoritePollActivity.this, jObj.getString(FavoritePollActivity.this.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(FavoritePollActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
     }
 
     @Override

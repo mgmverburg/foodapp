@@ -180,7 +180,7 @@ public class RequestManager {
         requestQueue.add(stringRequest);
     }
 
-    private void getFavoritePoll(String name, final CustomListener<List<FoodItem>> listener) {
+    public void getFavoritePoll(String name, final CustomListener<List<FoodItem>> listener) {
         final List<FoodItem> foodOptions = new ArrayList<FoodItem>();
         final String paramFavoriteName = name;
         //making HTTP request
@@ -234,6 +234,59 @@ public class RequestManager {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(context.getResources().getString(R.string.FAVORITENAME), paramFavoriteName);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    public void getAllFavoritePolls(final CustomListener<List<String>> listener) {
+        //making HTTP request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, context.getResources().getString(R.string.rootURL)
+                + context.getResources().getString(R.string.getAllFavoritePolls) ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jObj = null;
+                        Boolean isError = false;
+                        try {
+                            jObj = new JSONObject(response);
+                            isError = jObj.getBoolean("isError");
+                            if (!isError) {
+                                JSONArray favoritePollsArray = jObj.getJSONArray(context.getResources().getString(R.string.FOODITEMS));
+                                final int totalNumberRequests = favoritePollsArray.length();
+                                requestCount = 0;
+                                final List<String> favorites = new ArrayList<String>();
+                                for (int i=0;i<favoritePollsArray.length();i++) {
+                                    JSONObject favoritePoll = null;
+                                    favoritePoll = favoritePollsArray.getJSONObject(i);
+                                    final String name = favoritePoll.getString(context.getResources().getString(R.string.FAVORITENAMERETURN));
+                                    requestCount++;
+                                    favorites.add(name);
+                                    if (requestCount == totalNumberRequests) {
+                                        listener.getResult(favorites);
+
+
+                                    }
+
+                                }
+                            } else {
+                                Toast.makeText(context, jObj.getString(context.getResources().getString(R.string.errorMessage)), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
                 return params;
             }
         };

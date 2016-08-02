@@ -40,7 +40,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
     RequestQueue requestQueue;
     Spinner spinner;
     EditText pollName;
-    CustomSpinnerAdapter dataAdapter;
+    CustomSpinnerAdapterFood dataAdapter;
     CreatePollFoodArrayAdapter pollOptionsAdapter;
     String existingName;
     boolean creatingNew;
@@ -103,7 +103,7 @@ public class NewFavoritePollActivity extends AppCompatActivity implements Custom
 
 
     private void lastInitialization() {
-        dataAdapter = new CustomSpinnerAdapter(NewFavoritePollActivity.this, android.R.layout.simple_spinner_dropdown_item, allFoodTypes);
+        dataAdapter = new CustomSpinnerAdapterFood(NewFavoritePollActivity.this, android.R.layout.simple_spinner_dropdown_item, allFoodTypes);
 // Apply the adapter to the spinner
         dataAdapter.insert(new FoodItem("", ""),0);
         spinner.setAdapter(dataAdapter);
