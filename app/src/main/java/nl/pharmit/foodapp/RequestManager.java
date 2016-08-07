@@ -78,7 +78,7 @@ public class RequestManager {
                             isError = jObj.getBoolean("isError");
                             if (!isError) {
                                 JSONObject poll = jObj.getJSONObject(RequestManager.this.context.getResources().getString(R.string.POLLINFO));
-                                String deadlineTime = poll.getString(context.getResources().getString(R.string.DEADLINETIME));
+                                /*(String deadlineTime = poll.getString(context.getResources().getString(R.string.DEADLINETIME));
                                 try {
                                     calendar.setTime(dateFormat.parse(deadlineTime));
                                 } catch (ParseException e) {
@@ -89,6 +89,7 @@ public class RequestManager {
 
                                 int currentHour = calendar.getInstance().get(Calendar.HOUR_OF_DAY);
                                 int currentMinute = calendar.getInstance().get(Calendar.MINUTE);
+                                */
 
 //                                String PID = jObj.getString(RequestManager.this.context.getResources().getString(R.string.POLLID));
                                 listener.getResult(poll);
